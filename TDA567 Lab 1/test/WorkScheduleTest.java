@@ -35,58 +35,21 @@ public class WorkScheduleTest {
 		workScheduleThree = new WorkSchedule(3);
 	}
 
-	/******************* Constructor Tests ******************/
-
-	/**
-	 * Test method for {@link WorkSchedule#WorkSchedule(int)}.
-	 * 
-	 * Tests: If the constructor works for a integer zero argument.
-	 * Expects: A non null WorkSchedule instance.
-	 */
-	@Test
-	public void testWorkScheduleConstrucutor_Arg_ZeroSize() {
-		assertNotNull(workScheduleZero);
-	}
-
-	/**
-	 * Test method for {@link WorkSchedule#WorkSchedule(int)}.
-	 * 
-	 * Tests: If the constructor works for a integer One argument.
-	 * Expects: A non null WorkSchedule instance.
-	 */
-	@Test
-	public void testWorkScheduleConstrucutor_Arg_OneSize() {
-		assertNotNull(workScheduleOne);
-	}
-
-	/******************* Read Schedule Tests ******************/
-
-	/**
-	 * Test method for {@link WorkSchedule#readSchedule(int)}.
-	 * 
-	 * Tests: Reading a schedule hour when required number is unset.
-	 * Expects: The required number of workers of the hour is = 0.
-	 */
-	@Test
-	public void testReadSchedule_NoRequiredNumberSet() {
-		WorkSchedule.Hour h = workScheduleOne.readSchedule(0);
-		assertTrue(h.requiredNumber == 0);
-	}
-
-	/**
-	 * Test method for {@link WorkSchedule#readSchedule(int)}.
-	 * 
-	 * Tests: Reading a schedule hour when no worker is scheduled.
-	 * Expects: The number of working employees of the hour is = 0.
-	 */
-	@Test
-	public void testReadSchedule_NoScheduledWorker() {
-		WorkSchedule.Hour h = workScheduleOne.readSchedule(0);
-		assertTrue(h.workingEmployees.length == 0);
-	}
-
 	/******************* Set Required Number Tests ******************/
 
+	/*
+	 	requires: 
+  			starttime >= 0, endtime < size, starttime <= endtime, nemployee >= 0 
+		ensures: 
+  			For i between starttime and endtime, the requiredNumber of hour i equals nemployee. 
+  			For all other i the schedule is unchanged.
+	 */
+	
+	// Input space partioning of precondition space:
+	// {TODO
+	
+	
+	
 	// Uppdelning starttime = 0, starttime > 0, endtime < size, starttime < endtime, starttime = endtime, nemployee > 0, nemployee = 0 
 	// 0,0,0 - 0,0,1 - 0,1,1 - 0,1,2 - 1,0,0, - 1,0,1 - 1,1,1 - 1,1,2 kanske är en bra uppdelning? TODO
 
