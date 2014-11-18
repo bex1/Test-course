@@ -242,9 +242,9 @@ public class SetTest {
 	public void testContainsArithTriple_TrueCaseYFixed() {
 		// y = 50
 		emptySet.insert(50);
-		// x or z = 49
+		// x = 49 or z = 49
 		emptySet.insert(49);
-		// z or x = 51
+		// z = 51 or x = 51
 		emptySet.insert(51);
 		
 		boolean res = emptySet.containsArithTriple();
