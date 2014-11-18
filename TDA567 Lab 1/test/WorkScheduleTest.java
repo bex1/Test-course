@@ -835,7 +835,7 @@ public class WorkScheduleTest {
 		assertArrayEquals(new String[] {"0"}, hourZero.workingEmployees);
 
 		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
-		assertArrayEquals(new String[] {}, hourOne.workingEmployees);
+		assertArrayEquals(new String[] {"0"}, hourOne.workingEmployees);
 	}
 	
 	/**
@@ -875,8 +875,8 @@ public class WorkScheduleTest {
 		workScheduleThree.addWorkingPeriod("1", 2, 2);
 		String[] ret = workScheduleThree.workingEmployees(0, 1);
 		List<String> retList = Arrays.asList(ret);
-		assertTrue(Collections.frequency(retList, "0") == 1); 
-		assertTrue(Collections.frequency(retList, "1") == 1);
+		assertTrue(Collections.frequency(retList, "0") == 0); 
+		assertTrue(Collections.frequency(retList, "1") == 0);
 	}
 	
 	/**
@@ -892,13 +892,13 @@ public class WorkScheduleTest {
 		workScheduleThree.addWorkingPeriod("0", 2, 2);
 		workScheduleThree.workingEmployees(0, 1);
 		
-		WorkSchedule.Hour hourZero = workScheduleTwo.readSchedule(0);
+		WorkSchedule.Hour hourZero = workScheduleThree.readSchedule(0);
 		assertArrayEquals(new String[] {}, hourZero.workingEmployees);
 
-		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
+		WorkSchedule.Hour hourOne = workScheduleThree.readSchedule(1);
 		assertArrayEquals(new String[] {}, hourOne.workingEmployees);
 		
-		WorkSchedule.Hour hourTwo = workScheduleTwo.readSchedule(2);
+		WorkSchedule.Hour hourTwo = workScheduleThree.readSchedule(2);
 		assertArrayEquals(new String[] {"0"}, hourTwo.workingEmployees);
 	}
 	
