@@ -3,6 +3,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 /**
+ * Testsuite for {@link WorkSchedule}.
  * 
  * @author Daniel Bäckström & Martin Hermansson
  *

@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 /**
+ * Testsuite for {@link Set}
  * 
  * @author Daniel Bäckström & Martin Hermansson
  *
