@@ -19,7 +19,7 @@ import org.junit.Test;
  * 
  * {All integers nemployee, starttime and endtime such that 0 <= starttime <= endtime and endtime < size and nemployee >= 0}
  * 
- ***********  Partioning Of Input Space  ************
+ ***********  Partitioning Of Input Space  ************
  *
  * TODO
  *

@@ -32,9 +32,15 @@ import org.junit.Test;
  * 
  * {All integers starttime and endtime and all non null strings employee}
  * 
- ***********  Partioning Of Input Space  ************
+ ***********  Partitioning Of Input Space  ************
  *
- * TODO
+ * starttime < 0 or starttime >= 0
+ * endtime == size or endtime != size
+ * endtime > size or endtime < size
+ * starttime > endtime or starttime <= endtime
+ * [starttime, endtime] of schedule contains >= 1 hour h such that h.workingEmployees.length == h.requiredNumber or not
+ * [starttime, endtime] of schedule contains >= 1 hour h such that h.workingEmployees contains >= 1 string which equal employee or not
+ * employee is empty or not 
  *
  * @author Daniel
  *
@@ -47,18 +53,8 @@ public class AddWorkingPeriodTest {
 		workScheduleTwo = new WorkSchedule(2);
 	}
 
-	// Input space partioning of precondition space:
-	// {starttime < 0, 
-	// endtime == size, 
-	// endtime > size, 
-	// starttime > endtime, 
-	// adding to a schedule where [starttime, endtime] contains some hour with workingEmployees.length == requireNumber,
-	// adding to a schedule where [starttime, endtime] contains some hour where there is a string in workingEmployees which equal employee,
-	// the rest of the input space}
-
-
-	// starttime < 0
-
+	/* ******************  starttime < 0  ****************** */
+	
 	/**
 	 * Tests: Adding a working period with starttime < 0.
 	 * Expects: False return value.
@@ -97,7 +93,7 @@ public class AddWorkingPeriodTest {
 		}
 	}	
 
-	// endtime == size
+	/* ******************  endtime == size  ****************** */
 
 	/**
 	 * Tests: Adding a working period with endtime == size
@@ -137,7 +133,7 @@ public class AddWorkingPeriodTest {
 		}
 	}
 
-	// endtime > 0
+	/* ******************  endtime > size  ****************** */
 
 	/**
 	 * Tests: Adding a working period with endtime > size.
@@ -177,7 +173,7 @@ public class AddWorkingPeriodTest {
 		}
 	}
 
-	// starttime > endtime
+	/* ******************  starttime > endtime  ****************** */
 
 	/**
 	 * Tests: Adding a working period with starttime > endtime.
@@ -217,7 +213,8 @@ public class AddWorkingPeriodTest {
 		}
 	}
 
-	// adding to a schedule where [starttime, endtime] contains some hour with workingEmployees.length == requireNumber
+	/* ******************  [starttime, endtime] of schedule contains >= 1 hour h   ******************
+	   ******************  such that h.workingEmployees.length == h.requiredNumber ****************** */
 
 	/**
 	 * Tests: Adding a working period when there is some hour in that period that has a full schedule. 
@@ -274,8 +271,9 @@ public class AddWorkingPeriodTest {
 		assertTrue(hourOne.requiredNumber == 1);
 	}
 
-	// adding to a schedule where [starttime, endtime] contains some hour where 
-	// there is a string in workingEmployees which equal employee
+	/* ****************** [starttime, endtime] of schedule contains >= 1 hour h ******************
+	 * ****************** such that h.workingEmployees contains >= 1 string     ******************
+	 * ****************** which equal employee                                  ****************** */
 
 	/**
 	 * Tests: Adding a working period when there is some hour in that period that already has the worker scheduled.
@@ -332,10 +330,78 @@ public class AddWorkingPeriodTest {
 		assertTrue(hourOne.requiredNumber == 2);
 	}
 
-	// the rest of the input space (valid add stuff)
+	/* ******************  employee is empty  ****************** */
+	
+	/**
+	 * Tests: Adding a working period when there is room for the employee in the period
+	 * and the employee is an empty string.
+	 * 
+	 * Expects: True return value.
+	 */
+	@Test
+	public void testAddWorkingPeriod_ValidAddEmptyEmployee_TrueReturnExpected() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		boolean ret = workScheduleTwo.addWorkingPeriod("", 0, 1);
+		assertTrue(ret);
+	}
 
 	/**
-	 * Tests: Adding a working period when there is room for the worker in the period.
+	 * Tests: Adding a working period when there is room for the employee in the period
+	 * and the employee is an empty string.
+	 * 
+	 * Expects: The worker is scheduled for each of the hours in the period.
+	 */
+	@Test
+	public void testAddWorkingPeriod_ValidAddEmptyEmployee_WorkerScheduledForTheHoursAddedTo() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		workScheduleTwo.addWorkingPeriod("", 0, 1);
+
+		WorkSchedule.Hour hourZero = workScheduleTwo.readSchedule(0);
+		assertArrayEquals(new String[] {""}, hourZero.workingEmployees);
+
+		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
+		assertArrayEquals(new String[] {""}, hourOne.workingEmployees);
+	}
+
+	/**
+	 * Tests: Adding a working period when there is room for the employee in the period
+	 * and the employee is an empty string.
+	 * 
+	 * Expects: The scheduled workers for each hour not in the period is unchanged.
+	 */
+	@Test
+	public void testAddWorkingPeriod_ValidAddEmptyEmployee__UnchangedScheduledWorkersOfOtherHours() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		workScheduleTwo.addWorkingPeriod("", 0, 0);
+
+		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
+		assertArrayEquals(new String[] {}, hourOne.workingEmployees);
+	}
+
+	/**
+	 * Tests: Adding a working period when there is room for the employee in the period
+	 * and the employee is an empty string.
+	 * 
+	 * Expects: The required number of workers is unchanged for each hour.
+	 */
+	@Test
+	public void testAddWorkingPeriod_ValidAddEmptyEmployee_UnchangedRequiredNumbersOfAllHours() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		workScheduleTwo.addWorkingPeriod("", 0, 1);
+
+		WorkSchedule.Hour hourZero = workScheduleTwo.readSchedule(0);
+		assertTrue(hourZero.requiredNumber == 1);
+
+		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
+		assertTrue(hourOne.requiredNumber == 1);
+	}
+	
+	/* ******************  employee is not empty (rest of input space) ****************** */
+
+	/**
+	 * Tests: Adding a working period when there is room for the employee in the period
+	 * and the employee is not an empty string.
+	 * 
 	 * Expects: True return value.
 	 */
 	@Test
@@ -346,7 +412,9 @@ public class AddWorkingPeriodTest {
 	}
 
 	/**
-	 * Tests: Adding a working period when there is room for the worker in the period.
+	 * Tests: Adding a working period when there is room for the employee in the period
+	 * and the employee is not an empty string.
+	 * 
 	 * Expects: The worker is scheduled for each of the hours in the period.
 	 */
 	@Test
@@ -362,7 +430,9 @@ public class AddWorkingPeriodTest {
 	}
 
 	/**
-	 * Tests: Adding a working period when there is room for the worker in the period.
+	 * Tests: Adding a working period when there is room for the employee in the period
+	 * and the employee is not an empty string.
+	 * 
 	 * Expects: The scheduled workers for each hour not in the period is unchanged.
 	 */
 	@Test
@@ -375,7 +445,9 @@ public class AddWorkingPeriodTest {
 	}
 
 	/**
-	 * Tests: Adding a working period when there is room for the worker in the period.
+	 * Tests: Adding a working period when there is room for the employee in the period
+	 * and the employee is not an empty string.
+	 * 
 	 * Expects: The required number of workers is unchanged for each hour.
 	 */
 	@Test

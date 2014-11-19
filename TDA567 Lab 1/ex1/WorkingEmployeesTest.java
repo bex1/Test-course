@@ -27,7 +27,7 @@ import org.junit.Test;
  * 
  * {All integers starttime and endtime such that starttime >= 0 and endtime < size}
  * 
- ***********  Partioning Of Input Space  ************
+ ***********  Partitioning Of Input Space  ************
  *
  * TODO
  *

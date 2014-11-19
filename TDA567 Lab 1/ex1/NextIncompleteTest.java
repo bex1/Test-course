@@ -25,7 +25,7 @@ import org.junit.Test;
  * 
  * {All integers currenttime such that 0 =< currenttime < size}
  * 
- ***********  Partioning Of Input Space  ************
+ ***********  Partitioning Of Input Space  ************
  *
  * TODO
  *
