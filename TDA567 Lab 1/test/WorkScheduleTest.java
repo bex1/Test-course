@@ -54,6 +54,7 @@ public class WorkScheduleTest {
 	
 	// Uppdelning starttime = 0, starttime > 0, endtime < size, starttime < endtime, starttime = endtime, nemployee > 0, nemployee = 0 
 	// 0,0,0 - 0,0,1 - 0,1,1 - 0,1,2 - 1,0,0, - 1,0,1 - 1,1,1 - 1,1,2 kanske är en bra uppdelning? TODO
+	// TODO Får det på raderna ovan till att vara 7 kommentarer och 8 exempeluppdelningar. Det bör vi se över :)
 
 	/**
 	 * Test method for {@link WorkSchedule#setRequiredNumber(int, int, int)}.
@@ -176,7 +177,7 @@ public class WorkScheduleTest {
 	/**
 	 * Test method for {@link WorkSchedule#addWorkingPeriod(java.lang.String, int, int)}.
 	 * 
-	 * Tests: Adding a working period with nstarttime < 0.
+	 * Tests: Adding a working period with starttime < 0.
 	 * Expects: False return value.
 	 */
 	@Test
@@ -273,7 +274,7 @@ public class WorkScheduleTest {
 	 */
 	@Test
 	public void testAddWorkingPeriod_EndTimeGreaterThanSize_FalseReturnExpected() {
-		boolean ret = workScheduleTwo.addWorkingPeriod("0", 0, 3);
+		boolean ret = workScheduleTwo.addWorkingPeriod("0", 0, 3); //TODO: kom att tänka på en sak som gäller alla addWorkingPeriod. Borde vi inte anropa setRequiredNumber först?
 		assertFalse(ret);
 	}
 
@@ -541,11 +542,18 @@ public class WorkScheduleTest {
 		workScheduleTwo.setRequiredNumber(1, 0, 1);
 		workScheduleTwo.addWorkingPeriod("0", 0, 1);
 
+		for (int i = 0; i < 2; i++) {
+			WorkSchedule.Hour hour = workScheduleTwo.readSchedule(i);
+			assertTrue(hour.requiredNumber == 1);
+		}
+
+		/* TODO: remove (Lade i for-loopen ovan)
 		WorkSchedule.Hour hourZero = workScheduleTwo.readSchedule(0);
 		assertTrue(hourZero.requiredNumber == 1);
 
 		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
 		assertTrue(hourOne.requiredNumber == 1);
+		*/
 	}
 
 	/******************* Working Employees Tests ******************/
@@ -598,11 +606,18 @@ public class WorkScheduleTest {
 		workScheduleTwo.addWorkingPeriod("0", 0, 1);
 		workScheduleTwo.workingEmployees(1, 0);
 		
+		for (int i = 0; i < 2; i++) {
+			WorkSchedule.Hour hour = workScheduleTwo.readSchedule(i);
+			assertArrayEquals(new String[] {"0"}, hour.workingEmployees);
+		}
+		
+		/* TODO: remove, bytte mot for-loop ovan
 		WorkSchedule.Hour hourZero = workScheduleTwo.readSchedule(0);
 		assertArrayEquals(new String[] {"0"}, hourZero.workingEmployees);
 
 		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
 		assertArrayEquals(new String[] {"0"}, hourOne.workingEmployees);
+		*/
 	}
 	
 	/**
@@ -617,11 +632,18 @@ public class WorkScheduleTest {
 		workScheduleTwo.addWorkingPeriod("0", 0, 1);
 		workScheduleTwo.workingEmployees(1, 0);
 		
+		for (int i = 0; i < 2; i++) {
+			WorkSchedule.Hour hour = workScheduleTwo.readSchedule(i);
+			assertTrue(hour.requiredNumber == 2);
+		}
+		
+		/* TODO: remove, bytte mot for-loop ovan
 		WorkSchedule.Hour hourZero = workScheduleTwo.readSchedule(0);
 		assertTrue(hourZero.requiredNumber == 2);
 
 		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
 		assertTrue(hourOne.requiredNumber == 2);
+		*/
 	}
 	
 	// starttime == endtime and employee scheduled for hour starttime
@@ -655,11 +677,17 @@ public class WorkScheduleTest {
 		workScheduleTwo.addWorkingPeriod("0", 0, 1);
 		workScheduleTwo.workingEmployees(0, 0);
 		
+		for (int i = 0; i < 2; i++) {
+			WorkSchedule.Hour hour = workScheduleTwo.readSchedule(i);
+			assertArrayEquals(new String[] {"0"}, hour.workingEmployees);
+		}
+		/*TODO: remove, bytte mot for-loop ovan
 		WorkSchedule.Hour hourZero = workScheduleTwo.readSchedule(0);
 		assertArrayEquals(new String[] {"0"}, hourZero.workingEmployees);
 
 		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
 		assertArrayEquals(new String[] {"0"}, hourOne.workingEmployees);
+		*/
 	}
 	
 	/**
@@ -674,11 +702,17 @@ public class WorkScheduleTest {
 		workScheduleTwo.addWorkingPeriod("0", 0, 1);
 		workScheduleTwo.workingEmployees(0, 0);
 		
+		for (int i = 0; i < 2; i++) {
+			WorkSchedule.Hour hour = workScheduleTwo.readSchedule(i);
+			assertTrue(hour.requiredNumber == 2);
+		}
+		/*TODO: remove, bytte mot for-loop ovan
 		WorkSchedule.Hour hourZero = workScheduleTwo.readSchedule(0);
 		assertTrue(hourZero.requiredNumber == 2);
 
 		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
 		assertTrue(hourOne.requiredNumber == 2);
+		*/
 	}
 	
 	// starttime == endtime and employee not scheduled for hour starttime
@@ -731,11 +765,18 @@ public class WorkScheduleTest {
 		workScheduleTwo.addWorkingPeriod("0", 0, 0);
 		workScheduleTwo.workingEmployees(1, 1);
 		
+		for (int i = 0; i < 2; i++) {
+			WorkSchedule.Hour hour = workScheduleTwo.readSchedule(i);
+			assertTrue(hour.requiredNumber == 2);
+		}
+		
+		/* TODO: remove, bytte mot for-loop ovan
 		WorkSchedule.Hour hourZero = workScheduleTwo.readSchedule(0);
 		assertTrue(hourZero.requiredNumber == 2);
 
 		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
 		assertTrue(hourOne.requiredNumber == 2);
+		*/
 	}
 	
 	// starttime < endtime and employee scheduled for one hour in [starttime, endtime],
@@ -791,11 +832,19 @@ public class WorkScheduleTest {
 		workScheduleTwo.addWorkingPeriod("0", 0, 0);
 		workScheduleTwo.workingEmployees(0, 1);
 		
+		for (int i = 0; i < 2; i++) {
+			WorkSchedule.Hour hour = workScheduleTwo.readSchedule(i);
+			assertTrue(hour.requiredNumber == 2);
+		}
+		
+		/* TODO: remove, bytte mot for-loop ovan
+		
 		WorkSchedule.Hour hourZero = workScheduleTwo.readSchedule(0);
 		assertTrue(hourZero.requiredNumber == 2);
 
 		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
 		assertTrue(hourOne.requiredNumber == 2);
+		*/
 	}
 	
 	// starttime < endtime and employee scheduled for more than one hour in [starttime, endtime],
@@ -831,11 +880,18 @@ public class WorkScheduleTest {
 		workScheduleTwo.addWorkingPeriod("0", 0, 1);
 		workScheduleTwo.workingEmployees(0, 1);
 		
+		for (int i = 0; i < 2; i++) {
+			WorkSchedule.Hour hour = workScheduleTwo.readSchedule(i);
+			assertArrayEquals(new String[] {"0"}, hour.workingEmployees);
+		}
+		
+		/* TODO: remove, bytte mot for-loop ovan
 		WorkSchedule.Hour hourZero = workScheduleTwo.readSchedule(0);
 		assertArrayEquals(new String[] {"0"}, hourZero.workingEmployees);
 
 		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
 		assertArrayEquals(new String[] {"0"}, hourOne.workingEmployees);
+		*/
 	}
 	
 	/**
@@ -851,11 +907,18 @@ public class WorkScheduleTest {
 		workScheduleTwo.addWorkingPeriod("0", 0, 1);
 		workScheduleTwo.workingEmployees(0, 1);
 		
+		for (int i = 0; i < 2; i++) {
+			WorkSchedule.Hour hour = workScheduleTwo.readSchedule(i);
+			assertTrue(hour.requiredNumber == 2);
+		}
+		
+		/* TODO: remove, bytte mot for-loop ovan
 		WorkSchedule.Hour hourZero = workScheduleTwo.readSchedule(0);
 		assertTrue(hourZero.requiredNumber == 2);
 
 		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
 		assertTrue(hourOne.requiredNumber == 2);
+		*/
 	}
 	
 	
@@ -873,7 +936,7 @@ public class WorkScheduleTest {
 		workScheduleThree.setRequiredNumber(2, 0, 2);
 		workScheduleThree.addWorkingPeriod("0", 2, 2);
 		workScheduleThree.addWorkingPeriod("1", 2, 2);
-		String[] ret = workScheduleThree.workingEmployees(0, 1);
+		String[] ret = workScheduleThree.workingEmployees(0, 1); //TODO, skulle det inte räcka att kolla om längden på ret == 0?
 		List<String> retList = Arrays.asList(ret);
 		assertTrue(Collections.frequency(retList, "0") == 0); 
 		assertTrue(Collections.frequency(retList, "1") == 0);
@@ -892,6 +955,7 @@ public class WorkScheduleTest {
 		workScheduleThree.addWorkingPeriod("0", 2, 2);
 		workScheduleThree.workingEmployees(0, 1);
 		
+		// TODO: ersätta delvis med for-loop?
 		WorkSchedule.Hour hourZero = workScheduleThree.readSchedule(0);
 		assertArrayEquals(new String[] {}, hourZero.workingEmployees);
 
@@ -915,6 +979,12 @@ public class WorkScheduleTest {
 		workScheduleThree.addWorkingPeriod("0", 2, 2);
 		workScheduleThree.workingEmployees(0, 1);
 		
+		for (int i = 0; i < 3; i++) {
+			WorkSchedule.Hour hour = workScheduleThree.readSchedule(i);
+			assertTrue(hour.requiredNumber == 2);
+		}
+		
+		/* TODO: remove, bytte mot for-loopen ovan
 		WorkSchedule.Hour hourZero = workScheduleThree.readSchedule(0);
 		assertTrue(hourZero.requiredNumber == 2);
 
@@ -923,6 +993,7 @@ public class WorkScheduleTest {
 		
 		WorkSchedule.Hour hourTwo = workScheduleThree.readSchedule(2);
 		assertTrue(hourTwo.requiredNumber == 2);
+		*/
 	}
 	
 	/******************* Next Incomplete Tests ******************/
