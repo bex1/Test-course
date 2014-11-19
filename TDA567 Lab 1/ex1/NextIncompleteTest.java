@@ -27,7 +27,8 @@ import org.junit.Test;
  * 
  ***********  Partitioning Of Input Space  ************
  *
- * TODO
+ * [currenttime, size-1] of schedule contains no hour h such that h.workingEmployees.length < h.requiredNumber or > 0 hours
+ * [currenttime, size-1] of schedule contains 1 hour h such that h.workingEmployees.length < h.requiredNumber or > 1 hours
  *
  * @author Daniel
  *
@@ -40,17 +41,76 @@ public class NextIncompleteTest {
 		workScheduleThree = new WorkSchedule(3);
 	}
 
-	// Input space partioning of precondition space:
-	// {there is one hour in the interval currenttime to (size - 1) 
-  	//	such that the length of workingEmployees is less than requiredNumber,
-  	//  there is no hour in the interval currenttime to (size - 1) 
-  	//  such that the length of workingEmployees is less than requiredNumber,
-  	//  there are more than one hour in the interval currenttime to (size - 1) 
-  	//  such that the length of workingEmployees is less than requiredNumber}
+	/* ****************** [currenttime, size-1] of schedule contains no hour        ******************
+	 * ****************** h such that h.workingEmployees.length < h.requiredNumber  ****************** */
+	 
+	/**
+	 * Tests: Calling nextIncomplete with an argument currenttime such that
+	 * there is no hour in the interval currenttime to (size - 1) 
+  	 * where the length of workingEmployees is less than requiredNumber,
+  	 * 
+	 * Expects: Minus one is returned indicating that no unfilled schedule hour 
+	 * was found in the interval.
+	 */
+	@Test
+	public void testNextIncomplete_NoHourInInterval_MinusOneExpected() {
+		workScheduleThree.setRequiredNumber(1, 0, 2);
+		workScheduleThree.addWorkingPeriod("0", 0, 0);
+		workScheduleThree.addWorkingPeriod("1", 1, 2);
+		int ret = workScheduleThree.nextIncomplete(0);
+		assertTrue(ret == -1);
+	}
 	
+	/**
+	 * Tests: Calling nextIncomplete with an argument currenttime such that
+	 * there is no hour in the interval currenttime to (size - 1) 
+  	 * where the length of workingEmployees is less than requiredNumber.
+  	 * 
+	 * Expects: The scheduled workers for each hour is unchanged.
+	 */
+	@Test
+	public void testWorkingEmployees_NoHourInInterval_UnchangedScheduledWorkersOfAllHours() {
+		workScheduleThree.setRequiredNumber(1, 0, 2);
+		workScheduleThree.addWorkingPeriod("0", 0, 0);
+		workScheduleThree.addWorkingPeriod("1", 1, 2);
+		workScheduleThree.nextIncomplete(0);
+		
+		WorkSchedule.Hour hourZero = workScheduleThree.readSchedule(0);
+		assertArrayEquals(new String[] {"0"}, hourZero.workingEmployees);
+
+		WorkSchedule.Hour hourOne = workScheduleThree.readSchedule(1);
+		assertArrayEquals(new String[] {"1"}, hourOne.workingEmployees);
+		
+		WorkSchedule.Hour hourTwo = workScheduleThree.readSchedule(2);
+		assertArrayEquals(new String[] {"1"}, hourTwo.workingEmployees);
+	}
 	
-	// there is one hour in the interval currenttime to (size - 1) 
-  	//	such that the length of workingEmployees is less than requiredNumber,
+	/**
+	 * Tests: Calling nextIncomplete with an argument currenttime such that
+	 * there is no hour in the interval currenttime to (size - 1) 
+  	 * where the length of workingEmployees is less than requiredNumber.
+  	 * 
+	 * Expects: The required number of workers is unchanged for each hour.
+	 */
+	@Test
+	public void testWorkingEmployees_NoHourInInterval_UnchangedRequiredNumbersOfAllHours() {
+		workScheduleThree.setRequiredNumber(1, 0, 2);
+		workScheduleThree.addWorkingPeriod("0", 0, 0);
+		workScheduleThree.addWorkingPeriod("1", 1, 2);
+		workScheduleThree.nextIncomplete(0);
+		
+		WorkSchedule.Hour hourZero = workScheduleThree.readSchedule(0);
+		assertTrue(hourZero.requiredNumber == 1);
+
+		WorkSchedule.Hour hourOne = workScheduleThree.readSchedule(1);
+		assertTrue(hourOne.requiredNumber == 1);
+		
+		WorkSchedule.Hour hourTwo = workScheduleThree.readSchedule(2);
+		assertTrue(hourTwo.requiredNumber == 1);
+	}
+	
+	/* ****************** [currenttime, size-1] of schedule contains 1 hour        ******************
+	 * ****************** h such that h.workingEmployees.length < h.requiredNumber  ****************** */
 	
 	/**
 	 * Tests: Calling nextIncomplete with an argument currenttime such that
@@ -117,77 +177,8 @@ public class NextIncompleteTest {
 	}
 	
 	
-	//  there is no hour in the interval currenttime to (size - 1) 
-  	//  such that the length of workingEmployees is less than requiredNumber,
-	
-	/**
-	 * Tests: Calling nextIncomplete with an argument currenttime such that
-	 * there is no hour in the interval currenttime to (size - 1) 
-  	 * where the length of workingEmployees is less than requiredNumber,
-  	 * 
-	 * Expects: Minus one is returned indicating that no unfilled schedule hour 
-	 * was found in the interval.
-	 */
-	@Test
-	public void testNextIncomplete_NoHourInInterval_MinusOneExpected() {
-		workScheduleThree.setRequiredNumber(1, 0, 2);
-		workScheduleThree.addWorkingPeriod("0", 0, 0);
-		workScheduleThree.addWorkingPeriod("1", 1, 2);
-		int ret = workScheduleThree.nextIncomplete(0);
-		assertTrue(ret == -1);
-	}
-	
-	/**
-	 * Tests: Calling nextIncomplete with an argument currenttime such that
-	 * there is no hour in the interval currenttime to (size - 1) 
-  	 * where the length of workingEmployees is less than requiredNumber.
-  	 * 
-	 * Expects: The scheduled workers for each hour is unchanged.
-	 */
-	@Test
-	public void testWorkingEmployees_NoHourInInterval_UnchangedScheduledWorkersOfAllHours() {
-		workScheduleThree.setRequiredNumber(1, 0, 2);
-		workScheduleThree.addWorkingPeriod("0", 0, 0);
-		workScheduleThree.addWorkingPeriod("1", 1, 2);
-		workScheduleThree.nextIncomplete(0);
-		
-		WorkSchedule.Hour hourZero = workScheduleThree.readSchedule(0);
-		assertArrayEquals(new String[] {"0"}, hourZero.workingEmployees);
-
-		WorkSchedule.Hour hourOne = workScheduleThree.readSchedule(1);
-		assertArrayEquals(new String[] {"1"}, hourOne.workingEmployees);
-		
-		WorkSchedule.Hour hourTwo = workScheduleThree.readSchedule(2);
-		assertArrayEquals(new String[] {"1"}, hourTwo.workingEmployees);
-	}
-	
-	/**
-	 * Tests: Calling nextIncomplete with an argument currenttime such that
-	 * there is no hour in the interval currenttime to (size - 1) 
-  	 * where the length of workingEmployees is less than requiredNumber.
-  	 * 
-	 * Expects: The required number of workers is unchanged for each hour.
-	 */
-	@Test
-	public void testWorkingEmployees_NoHourInInterval_UnchangedRequiredNumbersOfAllHours() {
-		workScheduleThree.setRequiredNumber(1, 0, 2);
-		workScheduleThree.addWorkingPeriod("0", 0, 0);
-		workScheduleThree.addWorkingPeriod("1", 1, 2);
-		workScheduleThree.nextIncomplete(0);
-		
-		WorkSchedule.Hour hourZero = workScheduleThree.readSchedule(0);
-		assertTrue(hourZero.requiredNumber == 1);
-
-		WorkSchedule.Hour hourOne = workScheduleThree.readSchedule(1);
-		assertTrue(hourOne.requiredNumber == 1);
-		
-		WorkSchedule.Hour hourTwo = workScheduleThree.readSchedule(2);
-		assertTrue(hourTwo.requiredNumber == 1);
-	}
-	
-	
-	//  there are more than one hour in the interval currenttime to (size - 1) 
-  	//  such that the length of workingEmployees is less than requiredNumber
+	/* ****************** [currenttime, size-1] of schedule contains > 1 hours      ******************
+	 * ****************** h such that h.workingEmployees.length < h.requiredNumber  ****************** */
 	
 	/**
 	 * Tests: Calling nextIncomplete with an argument currenttime such that

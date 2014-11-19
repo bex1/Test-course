@@ -38,9 +38,9 @@ import org.junit.Test;
  * endtime == size or endtime != size
  * endtime > size or endtime < size
  * starttime > endtime or starttime <= endtime
- * [starttime, endtime] of schedule contains >= 1 hour h such that h.workingEmployees.length == h.requiredNumber or not
- * [starttime, endtime] of schedule contains >= 1 hour h such that h.workingEmployees contains >= 1 string which equal employee or not
- * employee is empty or not 
+ * [starttime, endtime] of schedule contains >= 1 hour h such that h.workingEmployees.length == h.requiredNumber or 0 such hours
+ * [starttime, endtime] of schedule contains >= 1 hour h such that h.workingEmployees contains >= 1 string which equal employee or 0 such hours
+ * employee is empty or not empty
  *
  * @author Daniel
  *
