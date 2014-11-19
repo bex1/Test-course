@@ -61,6 +61,8 @@ public class AddWorkingPeriodTest {
 	 */
 	@Test
 	public void testAddWorkingPeriod_StartTimeNegative_FalseReturnExpected() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
 		boolean ret = workScheduleTwo.addWorkingPeriod("0", -1, 0);
 		assertFalse(ret);
 	}
@@ -71,6 +73,8 @@ public class AddWorkingPeriodTest {
 	 */
 	@Test
 	public void testAddWorkingPeriod_StartTimeNegative_UnchangedScheduledWorkersOfAllHours() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
 		workScheduleTwo.addWorkingPeriod("0", -1, 0);
 
 		for (int i = 0; i < 2; i++) {
@@ -85,11 +89,13 @@ public class AddWorkingPeriodTest {
 	 */
 	@Test
 	public void testAddWorkingPeriod_StartTimeNegative_UnchangedRequiredNumbersOfAllHours() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
 		workScheduleTwo.addWorkingPeriod("0", -1, 0);
 
 		for (int i = 0; i < 2; i++) {
 			WorkSchedule.Hour h = workScheduleTwo.readSchedule(i);
-			assertTrue(h.requiredNumber == 0);
+			assertTrue(h.requiredNumber == 1);
 		}
 	}	
 
@@ -101,6 +107,8 @@ public class AddWorkingPeriodTest {
 	 */
 	@Test
 	public void testAddWorkingPeriod_EndTimeEqualToSize_FalseReturnExpected() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
 		boolean ret = workScheduleTwo.addWorkingPeriod("0", 0, 2);
 		assertFalse(ret);
 	}
@@ -111,6 +119,8 @@ public class AddWorkingPeriodTest {
 	 */
 	@Test
 	public void testAddWorkingPeriod_EndTimeEqualToSize_UnchangedScheduledWorkersOfAllHours() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
 		workScheduleTwo.addWorkingPeriod("0", 0, 2);
 
 		for (int i = 0; i < 2; i++) {
@@ -125,11 +135,13 @@ public class AddWorkingPeriodTest {
 	 */
 	@Test
 	public void testAddWorkingPeriod_EndTimeEqualToSize_UnchangedRequiredNumbersOfAllHours() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
 		workScheduleTwo.addWorkingPeriod("0", 0, 2);
 
 		for (int i = 0; i < 2; i++) {
 			WorkSchedule.Hour h = workScheduleTwo.readSchedule(i);
-			assertTrue(h.requiredNumber == 0);
+			assertTrue(h.requiredNumber == 1);
 		}
 	}
 
@@ -141,6 +153,8 @@ public class AddWorkingPeriodTest {
 	 */
 	@Test
 	public void testAddWorkingPeriod_EndTimeGreaterThanSize_FalseReturnExpected() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
 		boolean ret = workScheduleTwo.addWorkingPeriod("0", 0, 3);
 		assertFalse(ret);
 	}
@@ -151,6 +165,8 @@ public class AddWorkingPeriodTest {
 	 */
 	@Test
 	public void testAddWorkingPeriod_EndTimeGreaterThanSize_UnchangedScheduledWorkersOfAllHours() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
 		workScheduleTwo.addWorkingPeriod("0", 0, 3);
 
 		for (int i = 0; i < 2; i++) {
@@ -165,11 +181,13 @@ public class AddWorkingPeriodTest {
 	 */
 	@Test
 	public void testAddWorkingPeriod_EndTimeGreaterThanSize_UnchangedRequiredNumbersOfAllHours() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
 		workScheduleTwo.addWorkingPeriod("0", 0, 3);
 
 		for (int i = 0; i < 2; i++) {
 			WorkSchedule.Hour h = workScheduleTwo.readSchedule(i);
-			assertTrue(h.requiredNumber == 0);
+			assertTrue(h.requiredNumber == 1);
 		}
 	}
 
@@ -181,6 +199,8 @@ public class AddWorkingPeriodTest {
 	 */
 	@Test
 	public void testAddWorkingPeriod_StartTimeGreaterThanEndTime_FalseReturnExpected() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
 		boolean ret = workScheduleTwo.addWorkingPeriod("0", 1, 0);
 		assertFalse(ret); // Bug found
 	}
@@ -191,6 +211,8 @@ public class AddWorkingPeriodTest {
 	 */
 	@Test
 	public void testAddWorkingPeriod_StartTimeGreaterThanEndTime_UnchangedScheduledWorkersOfAllHours() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
 		workScheduleTwo.addWorkingPeriod("0", 1, 0);
 
 		for (int i = 0; i < 2; i++) {
@@ -205,11 +227,13 @@ public class AddWorkingPeriodTest {
 	 */
 	@Test
 	public void testAddWorkingPeriod_StartTimeGreaterThanEndTime_UnchangedRequiredNumbersOfAllHours() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
 		workScheduleTwo.addWorkingPeriod("0", 1, 0);
 
 		for (int i = 0; i < 2; i++) {
 			WorkSchedule.Hour h = workScheduleTwo.readSchedule(i);
-			assertTrue(h.requiredNumber == 0);
+			assertTrue(h.requiredNumber == 1);
 		}
 	}
 
