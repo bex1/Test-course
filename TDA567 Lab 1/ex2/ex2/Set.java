@@ -1,3 +1,4 @@
+package ex2;
 import java.util.*;
 
 public class Set {
@@ -31,8 +32,12 @@ public class Set {
 
 	public boolean member(int x) {
 		for (int i = 0; i < a.size(); i++) {
-			if (a.get(i) == x) {
-				return true;
+			if (a.get(i) > x) {
+				return false;
+			} else {
+				if (a.get(i) == x) {
+					return true;
+				}
 			}
 		}
 		return false;
