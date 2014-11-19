@@ -7,6 +7,14 @@ import org.junit.Test;
 /**
  * Tests for {@link Set#containsArithTriple()}.
  * 
+ * This must hold for an arith triple:
+ * y - x = z - y
+ * 
+ * Which can be expressed in these alternative ways:
+ * y = (z + x) / 2     
+ * x = 2y - z
+ * z = 2y - x 
+ * 
  * @author Daniel Bäckström & Martin Hermansson
  *
  */
@@ -19,7 +27,8 @@ public class ContainsArithTripleTest {
 	}
 
 	/**
-	 *
+	 * Tests: Checking if the method can compute that there are no arith triple.
+	 * Expects: False returned.
 	 */
 	@Test
 	public void testContainsArithTriple_NoTrueCase() {
@@ -31,10 +40,8 @@ public class ContainsArithTripleTest {
 	}
 	
 	/**
-	 * y - x = z - y
-	 * y = (z + x) / 2     
-	 * x = 2y - z
-	 * z = 2y - x 
+	 * Tests: Checking if the method can compute that there are arith triples when y is fixed.
+	 * Expects: True returned.
 	 */
 	@Test
 	public void testContainsArithTriple_TrueCaseYFixed() {
@@ -50,7 +57,8 @@ public class ContainsArithTripleTest {
 	}
 	
 	/**
-	 * 
+	 * Tests: Checking if the method can compute that there are arith triples when there are many in the set.
+	 * Expects: True returned.
 	 */
 	@Test
 	public void testContainsArithTriple_ManyTrueCases() {

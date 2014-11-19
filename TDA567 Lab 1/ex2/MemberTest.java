@@ -19,7 +19,8 @@ public class MemberTest {
 	}
 
 	/**
-	 * 
+	 * Tests: If the method can compute that an element that does exist in the set is in fact in the set.
+	 * Expects: True returned.
 	 */
 	@Test
 	public void testMember_ElementExists() {
@@ -32,10 +33,11 @@ public class MemberTest {
 	}
 	
 	/**
-	 * 
+	 * Tests: If the method can compute that an element larger than all existing elements in the set is not in the set.
+	 * Expects: False returned.
 	 */
 	@Test
-	public void testMember_HigherElementDoesNotExist() {
+	public void testMember_LargerElementDoesNotExist() {
 		emptySet.insert(2);
 		emptySet.insert(3);
 		emptySet.insert(4);
@@ -45,10 +47,11 @@ public class MemberTest {
 	}
 	
 	/**
-	 *
+	 * Tests: If the method can compute that an element smaller than all existing elements in the set is not in the set.
+	 * Expects: False returned.
 	 */
 	@Test
-	public void testMember_LowerElementDoesNotExist() {
+	public void testMember_SmallerElementDoesNotExist() {
 		emptySet.insert(2);
 		emptySet.insert(3);
 		emptySet.insert(4);

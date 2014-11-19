@@ -19,7 +19,8 @@ public class SectionTest {
 	}
 
 	/**
-	 * 
+	 * Tests: If the method can handle intersection of two empty sets.
+	 * Expects: Set is empty.
 	 */
 	@Test
 	public void testSection_BothEmpty() {
@@ -30,7 +31,8 @@ public class SectionTest {
 	}
 	
 	/**
-	 * 
+	 * Tests: If the method can handle intersection of when the called set is empty and the argument is not.
+	 * Expects: Set is empty.
 	 */
 	@Test
 	public void testSection_ThisEmptyOtherNot() {
@@ -43,7 +45,8 @@ public class SectionTest {
 	}
 	
 	/**
-	 * 
+	 * Tests: If the method can handle intersection of when the called set is not empty but the argument is.
+	 * Expects: Set is unchanged.
 	 */
 	@Test
 	public void testSection_OtherEmptyThisNot() {
@@ -56,7 +59,9 @@ public class SectionTest {
 	}
 	
 	/**
-	 * 
+	 * Tests: If the method can handle intersection of two disjunct non empty sets when the
+	 * called set has fewer elements than the argument set.
+	 * Expects: Set is unchanged.
 	 */
 	@Test
 	public void testSection_OtherSetDisjunctAndLarger() {
@@ -72,7 +77,9 @@ public class SectionTest {
 	}
 	
 	/**
-	 * 
+	 * Tests: If the method can handle intersection of two disjunct non empty sets when the
+	 * called set has more elements than the argument set.
+	 * Expects: Set is unchanged.
 	 */
 	@Test
 	public void testSection_OtherSetDisjunctAndSmaller() {
@@ -88,7 +95,9 @@ public class SectionTest {
 	}
 
 	/**
-	 * 
+	 * Tests: If the method can handle intersection of two intersecting non empty sets when the
+	 * called set has less elements than the argument set.
+	 * Expects: The set contains only the non-intersecting elements.
 	 */
 	@Test
 	public void testSection_OtherSetIntersectsAndLarger() {
@@ -104,7 +113,9 @@ public class SectionTest {
 	}
 	
 	/**
-	 * 
+	 * Tests: If the method can handle intersection of two intersecting non empty sets when the
+	 * called set has more elements than the argument set.
+	 * Expects: The set contains only the non-intersecting elements.
 	 */
 	@Test
 	public void testSection_OtherSetIntersectsAndSmaller() {

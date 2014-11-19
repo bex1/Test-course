@@ -19,7 +19,8 @@ public class InsertTest {
 	}
 
 	/**
-	 *
+	 * Tests: Checking if one can insert one element into the set.
+	 * Expects: The set contains only the inserted element once.
 	 */
 	@Test
 	public void testInsert_OneElement() {
@@ -29,7 +30,8 @@ public class InsertTest {
 	}
 	
 	/**
-	 * 
+	 * Tests: Checking if one can insert many distinct elements into the set in ascending order.
+	 * Expects: The set contains only the inserted distinct elements once ordered ascending.
 	 */
 	@Test
 	public void testInsert_ManyDistinctElements_AscendingOrder() {
@@ -42,7 +44,8 @@ public class InsertTest {
 	}
 	
 	/**
-	 * 
+	 * Tests: Checking if one can insert many distinct elements into the set in descending order.
+	 * Expects: The set contains only the inserted distinct elements once ordered ascending.
 	 */
 	@Test
 	public void testInsert_ManyDistinctElements_DescendingOrder() {
@@ -55,7 +58,8 @@ public class InsertTest {
 	}
 	
 	/**
-	 * 
+	 * Tests: Checking if one can insert duplicate elements into the set.
+	 * Expects: The set contains only the element once.
 	 */
 	@Test
 	public void testInsert_DuplicateElements() {
