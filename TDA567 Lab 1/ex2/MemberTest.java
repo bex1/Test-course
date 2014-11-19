@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Tests for {@link Set#member(int)}.
  * 
  * @author Daniel Bäckström & Martin Hermansson
  *
@@ -18,7 +19,7 @@ public class MemberTest {
 	}
 
 	/**
-	 * Test method for {@link Set#member(int)}.
+	 * 
 	 */
 	@Test
 	public void testMember_ElementExists() {
@@ -31,7 +32,7 @@ public class MemberTest {
 	}
 	
 	/**
-	 * Test method for {@link Set#member(int)}.
+	 * 
 	 */
 	@Test
 	public void testMember_HigherElementDoesNotExist() {
@@ -44,7 +45,7 @@ public class MemberTest {
 	}
 	
 	/**
-	 * Test method for {@link Set#member(int)}.
+	 *
 	 */
 	@Test
 	public void testMember_LowerElementDoesNotExist() {

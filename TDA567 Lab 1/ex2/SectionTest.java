@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Tests for {@link Set#section(Set)}.
  * 
  * @author Daniel Bäckström & Martin Hermansson
  *
@@ -18,7 +19,7 @@ public class SectionTest {
 	}
 
 	/**
-	 * Test method for {@link Set#section(Set)}.
+	 * 
 	 */
 	@Test
 	public void testSection_BothEmpty() {
@@ -29,7 +30,7 @@ public class SectionTest {
 	}
 	
 	/**
-	 * Test method for {@link Set#section(Set)}.
+	 * 
 	 */
 	@Test
 	public void testSection_ThisEmptyOtherNot() {
@@ -42,7 +43,7 @@ public class SectionTest {
 	}
 	
 	/**
-	 * Test method for {@link Set#section(Set)}.
+	 * 
 	 */
 	@Test
 	public void testSection_OtherEmptyThisNot() {
@@ -55,7 +56,7 @@ public class SectionTest {
 	}
 	
 	/**
-	 * Test method for {@link Set#section(Set)}.
+	 * 
 	 */
 	@Test
 	public void testSection_OtherSetDisjunctAndLarger() {
@@ -71,7 +72,7 @@ public class SectionTest {
 	}
 	
 	/**
-	 * Test method for {@link Set#section(Set)}.
+	 * 
 	 */
 	@Test
 	public void testSection_OtherSetDisjunctAndSmaller() {
@@ -87,7 +88,7 @@ public class SectionTest {
 	}
 
 	/**
-	 * Test method for {@link Set#section(Set)}.
+	 * 
 	 */
 	@Test
 	public void testSection_OtherSetIntersectsAndLarger() {
@@ -103,7 +104,7 @@ public class SectionTest {
 	}
 	
 	/**
-	 * Test method for {@link Set#section(Set)}.
+	 * 
 	 */
 	@Test
 	public void testSection_OtherSetIntersectsAndSmaller() {

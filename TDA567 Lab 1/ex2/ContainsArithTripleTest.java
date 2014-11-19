@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Tests for {@link Set#containsArithTriple()}.
  * 
  * @author Daniel Bäckström & Martin Hermansson
  *
@@ -18,7 +19,7 @@ public class ContainsArithTripleTest {
 	}
 
 	/**
-	 * Test method for {@link Set#containsArithTriple()}.
+	 *
 	 */
 	@Test
 	public void testContainsArithTriple_NoTrueCase() {
@@ -34,8 +35,6 @@ public class ContainsArithTripleTest {
 	 * y = (z + x) / 2     
 	 * x = 2y - z
 	 * z = 2y - x 
-	 * 
-	 * Test method for {@link Set#containsArithTriple()}.
 	 */
 	@Test
 	public void testContainsArithTriple_TrueCaseYFixed() {
@@ -51,8 +50,6 @@ public class ContainsArithTripleTest {
 	}
 	
 	/**
-	 * Test method for {@link Set#containsArithTriple()}.
-	 * 
 	 * 
 	 */
 	@Test

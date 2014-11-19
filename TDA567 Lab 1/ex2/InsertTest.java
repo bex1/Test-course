@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Tests for {@link Set#insert(int)}.
  * 
  * @author Daniel Bäckström & Martin Hermansson
  *
@@ -18,7 +19,7 @@ public class InsertTest {
 	}
 
 	/**
-	 * Test method for {@link Set#insert(int)}.
+	 *
 	 */
 	@Test
 	public void testInsert_OneElement() {
@@ -28,7 +29,7 @@ public class InsertTest {
 	}
 	
 	/**
-	 * Test method for {@link Set#insert(int)}.
+	 * 
 	 */
 	@Test
 	public void testInsert_ManyDistinctElements_AscendingOrder() {
@@ -41,7 +42,7 @@ public class InsertTest {
 	}
 	
 	/**
-	 * Test method for {@link Set#insert(int)}.
+	 * 
 	 */
 	@Test
 	public void testInsert_ManyDistinctElements_DescendingOrder() {
@@ -54,7 +55,7 @@ public class InsertTest {
 	}
 	
 	/**
-	 * Test method for {@link Set#insert(int)}.
+	 * 
 	 */
 	@Test
 	public void testInsert_DuplicateElements() {
