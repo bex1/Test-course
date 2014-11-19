@@ -1,4 +1,4 @@
-package ex2;
+
 import java.util.*;
 
 public class Set {
