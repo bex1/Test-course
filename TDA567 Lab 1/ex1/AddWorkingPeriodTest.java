@@ -42,7 +42,7 @@ import org.junit.Test;
  * [starttime, endtime] of schedule contains >= 1 hour h such that h.workingEmployees contains >= 1 string which equal employee or 0 such hours
  * employee is empty or not empty
  *
- * @author Daniel
+ * @author Daniel Bäckström & Martin Hermansson
  *
  */
 public class AddWorkingPeriodTest {

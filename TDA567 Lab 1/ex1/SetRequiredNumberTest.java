@@ -29,7 +29,7 @@ import org.junit.Test;
  * nemployee >  0 and starttime == 0 and starttime <  endtime or not
  * nemployee >  0 and starttime > 0  and starttime == endtime or nemployee > 0 and starttime > 0 and starttime < endtime
  *
- * @author Daniel
+ * @author Daniel Bäckström & Martin Hermansson
  *
  */
 public class SetRequiredNumberTest {

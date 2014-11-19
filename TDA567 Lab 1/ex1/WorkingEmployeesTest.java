@@ -33,7 +33,7 @@ import org.junit.Test;
  * starttime == endtime and employee scheduled for hour starttime, not scheduled for hour startime or starttime < endtime
  * starttime < endtime and number of hours in [starttime, endtime] the employee is scheduled for is 0, 1 or >1 
  * 
- * @author Daniel
+ * @author Daniel Bäckström & Martin Hermansson
  *
  */
 public class WorkingEmployeesTest {

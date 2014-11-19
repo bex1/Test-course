@@ -30,7 +30,7 @@ import org.junit.Test;
  * [currenttime, size-1] of schedule contains no hour h such that h.workingEmployees.length < h.requiredNumber or > 0 hours
  * [currenttime, size-1] of schedule contains 1 hour h such that h.workingEmployees.length < h.requiredNumber or > 1 hours
  *
- * @author Daniel
+ * @author Daniel Bäckström & Martin Hermansson
  *
  */
 public class NextIncompleteTest {
