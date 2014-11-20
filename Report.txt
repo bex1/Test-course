@@ -1,0 +1,12 @@
+You must explain and motivate why you divided the test cases in the way you did. 
+
+You must show how you defined the input space, and how you partitioned it.
+
+a) seqRequiredNumber 
+
+b) addWorkingPeriod
+
+c) workingEmployees
+
+d) nextIncomplete
+
