@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import Martinstest.Set;
+
 /**
  * Tests for {@link Set#insert(int)}.
  * 
