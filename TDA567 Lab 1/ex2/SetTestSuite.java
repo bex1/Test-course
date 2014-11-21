@@ -4,12 +4,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import Martinstest.Set;
-
 /**
  * Testsuite for {@link Set}
  * 
- * @author Daniel Bäckström & Martin Hermansson
+ * @author Daniel Bï¿½ckstrï¿½m & Martin Hermansson
  *
  */
 @RunWith(Suite.class)
