@@ -38,6 +38,7 @@ import org.junit.Test;
  * endtime == size or endtime != size
  * endtime > size or endtime < size
  * starttime > endtime or starttime <= endtime
+ * starttime == endtime or starttime < endtime
  * [starttime, endtime] of schedule contains >= 1 hour h such that h.workingEmployees.length == h.requiredNumber or 0 such hours
  * [starttime, endtime] of schedule contains >= 1 hour h such that h.workingEmployees contains >= 1 string which equal employee or 0 such hours
  * employee is empty or not empty
@@ -236,7 +237,54 @@ public class AddWorkingPeriodTest {
 			assertTrue(h.requiredNumber == 1);
 		}
 	}
+	
+	/* ******************  starttime == endtime  ****************** */
 
+	/**
+	 * Tests: Adding a working period with starttime == endtime.
+	 * Expects: True return value.
+	 */
+	@Test
+	public void testAddWorkingPeriod_StartTimeEqualToEndTime_FalseReturnExpected() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
+		boolean ret = workScheduleTwo.addWorkingPeriod("0", 0, 0);
+		assertTrue(ret); // Bug found
+	}
+
+	/**
+	 * Tests: Adding a working period with starttime == endtime.
+	 * Expects: The scheduled workers for each hour is unchanged.
+	 */
+	@Test
+	public void testAddWorkingPeriod_StartTimeEqualToEndTime_UnchangedScheduledWorkersOfAllHours() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
+		workScheduleTwo.addWorkingPeriod("0", 0, 0);
+
+		WorkSchedule.Hour hourZero = workScheduleTwo.readSchedule(0);
+		assertArrayEquals(new String[] {"0"}, hourZero.workingEmployees);
+
+		WorkSchedule.Hour hourOne = workScheduleTwo.readSchedule(1);
+		assertArrayEquals(new String[] {}, hourOne.workingEmployees);
+	}
+
+	/**
+	 * Tests: Adding a working period with starttime == endtime.
+	 * Expects: The required number of workers is unchanged for each hour.
+	 */
+	@Test
+	public void testAddWorkingPeriod_StartTimeEqualToEndTime_UnchangedRequiredNumbersOfAllHours() {
+		workScheduleTwo.setRequiredNumber(1, 0, 1);
+		
+		workScheduleTwo.addWorkingPeriod("0", 0, 0);
+
+		for (int i = 0; i < 2; i++) {
+			WorkSchedule.Hour h = workScheduleTwo.readSchedule(i);
+			assertTrue(h.requiredNumber == 1);
+		}
+	}
+	
 	/* ******************  [starttime, endtime] of schedule contains >= 1 hour h   ******************
 	   ******************  such that h.workingEmployees.length == h.requiredNumber ****************** */
 
