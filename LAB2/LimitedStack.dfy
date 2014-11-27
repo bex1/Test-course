@@ -1,0 +1,117 @@
+// A LIFO queue (aka a stack) with limited capacity.
+class LimitedQ{
+
+      var capacity : int; // capacity, max number of elements allowed on the stack.
+      var arr : array<int>; // contents of stack.
+      var top : int; // The index of the top of the stack, or -1 if the stack is empty
+
+      // This predicate express a class invariant: All objects of this calls should satisfy this.
+      predicate Valid()
+      reads ?;
+      {
+        
+      }
+
+      predicate Empty()
+      reads this;
+      {
+        
+      }
+
+      predicate Full()
+      reads this;
+      {
+        
+      }
+ /*     
+      method Init(c : int)
+      modifies this;
+      requires ? 
+
+      ensures fresh(arr); // ensures arr is a newly created object.
+      // Additional post-condition to be given here!
+      {
+        capacity := c;
+        arr := new int[c];
+        top := -1;
+      }
+*/
+
+/*      
+      method isEmpty returns (res : bool)
+      
+      {
+        
+      }
+*/
+
+/*
+      // Returns the top element of the stack, without removing it.
+      method Peek() returns (elem : int)
+      
+      {
+        
+      }
+*/
+
+/*
+      // Pushed an element to the top of a (non full) stack. 
+      method Push(elem : int)
+      
+      {
+        
+      }
+*/
+      // Pops the top element off the stack.
+/*  
+      method Pop() returns (elem : int)
+      
+      {
+        
+      }
+ */
+
+/*
+      //Push onto full stack, oldest element is discarded.
+      method Push2(elem : int)
+      
+      {
+        
+      }
+*/
+
+/*
+
+// When you are finished,  all the below assertions should be provable. 
+// Feel free to add extra ones as well.
+      method Main(){
+           var s := new LimitedStack;
+           s.Init(3);
+
+           assert s.Empty && !s.Full; 
+
+           s.Push(27);
+           assert !s.Empty;
+
+           var e := s.Pop();
+           assert e == 27;
+
+           s.Push(5);
+           s.Push(32);
+           s.Push(9);
+           assert s.Full;
+
+           var e2 := s.Pop();
+           assert e2 == 9 && !s.Full; 
+           assert s.arr[0] == 5;
+
+           s.Push(e2);
+           s.Push2(99);
+
+           var e3 := s.Peek();
+           assert e3 == 99;
+           assert s.arr[0] == 32;
+                     
+       }
+*/
+}
