@@ -39,20 +39,22 @@ class LimitedQ{
 
      
       method isEmpty() returns (res : bool)
-      ensures res <==> Empty();
+      requires Valid();
+      ensures Valid() && res <==> Empty();
       {
         res := top == -1;
       }
 
 
-/*
+
       // Returns the top element of the stack, without removing it.
       method Peek() returns (elem : int)
-      
+      requires Valid() && !Empty();
+      ensures Valid() && arr.Length == old(arr.Length) && elem == arr[top];
       {
-        
+        elem := arr[top];
       }
-*/
+
 
 /*
       // Pushed an element to the top of a (non full) stack. 
