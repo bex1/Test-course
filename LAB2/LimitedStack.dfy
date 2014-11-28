@@ -26,8 +26,8 @@ class LimitedQ{
       
       method Init(c : int)
       modifies this;
-      requires c > 0
-      ensures (capacity == c) && Valid() && Empty()
+      requires c > 0;
+      ensures (capacity == c) && Valid() && Empty();
       ensures fresh(arr); // ensures arr is a newly created object.
       // Additional post-condition to be given here!
       {
@@ -37,13 +37,13 @@ class LimitedQ{
       }
 
 
-/*      
-      method isEmpty returns (res : bool)
-      
+     
+      method isEmpty() returns (res : bool)
+      ensures res <==> Empty();
       {
-        
+        res := top == -1;
       }
-*/
+
 
 /*
       // Returns the top element of the stack, without removing it.
