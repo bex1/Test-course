@@ -9,7 +9,7 @@ class LimitedQ{
       predicate Valid()
       reads this;
       {
-        arr != null && capacity > 0 && arr.Length == capacity && -1 <= top < capacity 
+        arr != null && capacity > 0 && arr.Length == capacity && -1 <= top < capacity
       }
 
       predicate Empty()
@@ -50,20 +50,23 @@ class LimitedQ{
       // Returns the top element of the stack, without removing it.
       method Peek() returns (elem : int)
       requires Valid() && !Empty();
-      ensures Valid() && arr.Length == old(arr.Length) && elem == arr[top];
+      ensures Valid() && top == old(top) && arr[top] == elem;
       {
         elem := arr[top];
       }
 
 
-/*
+
       // Pushed an element to the top of a (non full) stack. 
       method Push(elem : int)
-      
+      modifies this;
+      requires Valid() && !Full();
+      ensures Valid() && top == old(top) + 1 && arr[top] == elem;
       {
-        
+        top := top + 1;
+        arr[top] := elem;
       }
-*/
+
       // Pops the top element off the stack.
 /*  
       method Pop() returns (elem : int)
