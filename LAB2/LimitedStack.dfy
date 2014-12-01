@@ -1,5 +1,5 @@
 // A LIFO queue (aka a stack) with limited capacity.
-class LimitedQ{
+class LimitedStack{
 
       var capacity : int; // capacity, max number of elements allowed on the stack.
       var arr : array<int>; // contents of stack.
@@ -28,7 +28,7 @@ class LimitedQ{
       modifies this;
       requires c > 0;
       ensures fresh(arr); // ensures arr is a newly created object.
-            ensures (capacity == c) && Valid() && Empty();
+      ensures (capacity == c) && Valid() && Empty();
       {
         capacity := c;
         arr := new int[c];
@@ -44,24 +44,17 @@ class LimitedQ{
         res := top == -1;
       }
 
-
-
       // Returns the top element of the stack, without removing it.
       method Peek() returns (elem : int)
       requires Valid() && !Empty();
-      ensures Valid() && top == old(top) && arr[top] == elem; // top == old(top)  is prolly unessesary since we have no modifies clause anyways
+      ensures Valid() &&  arr[top] == elem; //  top == old(top)  is prolly unessesary since we have no modifies clause anyways. Was removed.
       {
         elem := arr[top];
       }
 
-
-
       // Pushed an element to the top of a (non full) stack. 
       method Push(elem : int)
-      modifies this, this.arr;
-
-      //modifies this`top, this.arr;
- 
+      modifies this`top, arr;
       requires Valid() && !Full();
       ensures Valid() && top == old(top) + 1 && arr[top] == elem;
 	  ensures forall i :: 0 <= i < top ==> arr[i] == old(arr[i]);
@@ -74,11 +67,9 @@ class LimitedQ{
       method Pop() returns (elem : int)
       modifies this`top;
       requires Valid() && !Empty();
-    //  ensures Valid() && top == old(top) - 1 && old(arr[top]) == elem; // from Martin, vi får komma överens om vilken vi ska ta :)
-	  ensures Valid() && old(arr[old(top)]) == elem && top == old(top) - 1; // from Daniel
+      ensures Valid() && top == old(top) - 1 && old(arr[top]) == elem; // from Martin, vi får komma överens om vilken vi ska ta :) svar: Tog din!
       {
-        elem := Peek(); // From Martin
-		//elem := arr[top]; // From Daniel
+        elem := Peek(); 
 		top := top - 1;
       }
 
@@ -91,16 +82,14 @@ class LimitedQ{
       {
 		var index := 0;
 		while (index  < capacity - 1) 
-		  invariant 0 <= index  <= capacity;
-		  invariant forall k :: 0 <= k < index  ==> arr[k] == old(arr[k+1]); // denna behöver justeras
+			invariant 0 <= index  < capacity;
+			invariant forall k :: 0 <= k < index  ==>  arr[k] == old(arr[k+1]); //  denna behöver justeras. Så jäkla skumt att det inte funkar nu :(
 	    {
 		  arr[index] := arr[index+1];
 		  index := index + 1;
-		  }
-		  arr[top] := elem;
+		 }
+		 arr[top] := elem;
 	  }
-
-/*
 
 // When you are finished,  all the below assertions should be provable. 
 // Feel free to add extra ones as well.
@@ -133,5 +122,5 @@ class LimitedQ{
            assert s.arr[0] == 32;
                      
        }
-*/
+
 }
