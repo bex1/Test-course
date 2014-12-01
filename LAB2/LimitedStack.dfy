@@ -13,13 +13,13 @@ class LimitedStack{
       }
 
       predicate Empty()
-      reads this;
+      reads this`top;
       {
         top == -1
       }
 
       predicate Full()
-      reads this;
+      reads this`top, this`capacity;
       {
         top == capacity - 1
       }
@@ -35,8 +35,6 @@ class LimitedStack{
         top := -1;
       }
 
-
-     
       method isEmpty() returns (res : bool)
       requires Valid();
       ensures Valid() && res <==> Empty();
@@ -54,7 +52,7 @@ class LimitedStack{
 
       // Pushed an element to the top of a (non full) stack. 
       method Push(elem : int)
-      modifies this`top, arr;
+      modifies this`top, this.arr;
       requires Valid() && !Full();
       ensures Valid() && top == old(top) + 1 && arr[top] == elem;
 	  ensures forall i :: 0 <= i < top ==> arr[i] == old(arr[i]);
@@ -75,7 +73,7 @@ class LimitedStack{
 
       //Push onto full stack, oldest element is discarded.
       method Push2(elem : int)
-	  modifies arr;
+	  modifies this.arr;
       requires Valid() && Full();
       ensures Valid() && arr[top] == elem;
       ensures forall k :: 0 <= k < capacity - 1 ==> arr[k] == old(arr[k+1]);
