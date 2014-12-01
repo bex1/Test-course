@@ -86,7 +86,7 @@ class LimitedQ{
       //Push onto full stack, oldest element is discarded.
       method Push2(elem : int)
 	 modifies arr;
-      requires Valid() && Full();
+      requires Valid();
       ensures Valid() && arr[top] == elem
       ensures forall k :: 0 <= k < capacity - 1 ==> arr[k] == old(arr[k+1]);
       {
