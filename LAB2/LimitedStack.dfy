@@ -70,6 +70,8 @@ class LimitedQ{
       // Pops the top element off the stack.
 /*  
       method Pop() returns (elem : int)
+      modifies this;
+      requires Valid() && !Empty();
       
       {
         
