@@ -59,9 +59,10 @@ class LimitedQ{
 
       // Pushed an element to the top of a (non full) stack. 
       method Push(elem : int)
-      modifies this;
+      modifies this, this.arr;
       requires Valid() && !Full();
       ensures Valid() && top == old(top) + 1 && arr[top] == elem;
+	  ensures forall i :: 0 <= i < top ==> arr[i] == old(arr[i]);
       {
         top := top + 1;
         arr[top] := elem;
