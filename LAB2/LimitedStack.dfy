@@ -69,24 +69,34 @@ class LimitedQ{
       }
 
       // Pops the top element off the stack.
-/*  
+  
       method Pop() returns (elem : int)
       modifies this;
       requires Valid() && !Empty();
-      
+      ensures Valid() && top == old(top) - 1 && old(arr[top]) == elem;
       {
-        
+        elem := Peek();
+		top := top - 1;
       }
- */
+ 
 
-/*
+
       //Push onto full stack, oldest element is discarded.
       method Push2(elem : int)
-      
+      modifies this;
+	  requires Valid()
+	  ensures Valid()
       {
-        
+        if (Full())
+		{
+		  Push(elem);
+		}
+		else
+		{
+		  
+		}
       }
-*/
+
 
 /*
 
