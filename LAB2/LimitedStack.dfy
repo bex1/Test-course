@@ -49,7 +49,7 @@ class LimitedQ{
       // Returns the top element of the stack, without removing it.
       method Peek() returns (elem : int)
       requires Valid() && !Empty();
-      ensures Valid() && top == old(top) && arr[top] == elem;
+      ensures Valid() && top == old(top) && arr[top] == elem; // top == old(top)  is prolly unessesary since we have no modifies clause anyways
       {
         elem := arr[top];
       }
