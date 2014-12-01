@@ -13,13 +13,13 @@ class LimitedQ{
       }
 
       predicate Empty()
-      reads this`top;
+      reads this;
       {
         top == -1
       }
 
       predicate Full()
-      reads this`top, this`capacity;
+      reads this;
       {
         top == capacity - 1
       }
@@ -58,11 +58,10 @@ class LimitedQ{
 
       // Pushed an element to the top of a (non full) stack. 
       method Push(elem : int)
-<<<<<<< HEAD
       modifies this, this.arr;
-=======
-      modifies this`top, arr;
->>>>>>> e518b7c20608bd41bf6c3c8d91eff01ce653dff3
+
+      //modifies this`top, this.arr;
+ 
       requires Valid() && !Full();
       ensures Valid() && top == old(top) + 1 && arr[top] == elem;
 	  ensures forall i :: 0 <= i < top ==> arr[i] == old(arr[i]);
@@ -75,37 +74,30 @@ class LimitedQ{
       method Pop() returns (elem : int)
       modifies this`top;
       requires Valid() && !Empty();
-      ensures Valid() && top == old(top) - 1 && old(arr[top]) == elem; // from Martin
+    //  ensures Valid() && top == old(top) - 1 && old(arr[top]) == elem; // from Martin, vi får komma överens om vilken vi ska ta :)
 	  ensures Valid() && old(arr[old(top)]) == elem && top == old(top) - 1; // from Daniel
       {
         elem := Peek(); // From Martin
-		elem := arr[top]; // From Daniel
+		//elem := arr[top]; // From Daniel
 		top := top - 1;
       }
 
       //Push onto full stack, oldest element is discarded.
       method Push2(elem : int)
-	 modifies arr;
-      requires Valid();
-      ensures Valid() && arr[top] == elem
+	  modifies arr;
+      requires Valid() && Full();
+      ensures Valid() && arr[top] == elem;
       ensures forall k :: 0 <= k < capacity - 1 ==> arr[k] == old(arr[k+1]);
       {
-	    if (Full())
-		{
-		  var i: int := 0;
-		  while (index  < capacity - 1) 
-		  	  invariant 0 <= index  < capacity;
-			  invariant forall k :: 0 <= k < index  ==> arr[k] == old(arr[k+1]);
-		  {
-			  arr[i] := arr[i+1];
-			  i := i + 1;
+		var index := 0;
+		while (index  < capacity - 1) 
+		  invariant 0 <= index  <= capacity;
+		  invariant forall k :: 0 <= k < index  ==> arr[k] == old(arr[k+1]); // denna behöver justeras
+	    {
+		  arr[index] := arr[index+1];
+		  index := index + 1;
 		  }
 		  arr[top] := elem;
-        }
-		else
-		{
-		  Push(elem);
-		}
 	  }
 
 /*
