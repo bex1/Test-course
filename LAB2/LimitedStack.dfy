@@ -13,13 +13,13 @@ class LimitedQ{
       }
 
       predicate Empty()
-      reads this;
+      reads this`top;
       {
         top == -1
       }
 
       predicate Full()
-      reads this;
+      reads this`top, this`capacity;
       {
         top == capacity - 1
       }
@@ -27,9 +27,8 @@ class LimitedQ{
       method Init(c : int)
       modifies this;
       requires c > 0;
-      ensures (capacity == c) && Valid() && Empty();
       ensures fresh(arr); // ensures arr is a newly created object.
-      // Additional post-condition to be given here!
+            ensures (capacity == c) && Valid() && Empty();
       {
         capacity := c;
         arr := new int[c];
@@ -59,7 +58,7 @@ class LimitedQ{
 
       // Pushed an element to the top of a (non full) stack. 
       method Push(elem : int)
-      modifies this;
+      modifies this`top, arr;
       requires Valid() && !Full();
       ensures Valid() && top == old(top) + 1 && arr[top] == elem;
       {
@@ -68,24 +67,32 @@ class LimitedQ{
       }
 
       // Pops the top element off the stack.
-/*  
       method Pop() returns (elem : int)
-      modifies this;
+      modifies this`top;
       requires Valid() && !Empty();
-      
+	  ensures Valid() && old(arr[old(top)]) == elem && top == old(top) - 1;
       {
-        
+		elem := arr[top];
+		top := top - 1;
       }
- */
 
-/*
       //Push onto full stack, oldest element is discarded.
       method Push2(elem : int)
-      
+	 modifies arr;
+      requires Valid() && Full();
+      ensures Valid() && arr[top] == elem
+      ensures forall k :: 0 <= k < capacity - 1 ==> arr[k] == old(arr[k+1]);
       {
-        
+		var i: int := 0;
+		while (index  < capacity - 1) 
+			invariant 0 <= index  < capacity;
+			invariant forall k :: 0 <= k < index  ==> arr[k] == old(arr[k+1]);
+		{
+			arr[i] := arr[i+1];
+			i := i + 1;
+		}
+		arr[top] := elem;
       }
-*/
 
 /*
 
