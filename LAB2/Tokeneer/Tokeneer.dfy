@@ -45,21 +45,21 @@ class User {
 class EnrolmentStation {
 	var users : set<User>; //behövs denna??
 	
-	function method scanFinger(user : User) : int
+	function method ScanFinger(user : User) : int
 	reads user;
 	requires user != null;
 	{
 		user.fingerprint
 	}
 	
-	function method validateFingerPrint(token : Token, scannedFingerprint : int) : bool
+	function method ValidateFingerPrint(token : Token, scannedFingerprint : int) : bool
 	reads token;
 	requires token != null;
 	{
 		token.fingerprint == scannedFingerprint
 	}
 	
-	function method validateClearanceLevel(token : Token, door : Door) : bool
+	function method ValidateClearanceLevel(token : Token, door : Door) : bool
 	reads token, door;
 	requires token != null;
 	requires door != null;
@@ -67,23 +67,24 @@ class EnrolmentStation {
 		token.clearanceLevel >= door.requiredClearanceLevel
 	}
   
-	method enterDoor(user : User, door : Door) returns (accessGranted : bool)
+	method EnterDoor(user : User, door : Door) returns (accessGranted : bool)
 	modifies user.token`valid;
 	requires user != null && user.token != null && door != null;
-	ensures user.token.valid && validateFingerPrint(user.token, scanFinger(user)) && validateClearanceLevel(user.token, door) ==> accessGranted && user.token.valid;
-	ensures !user.token.valid || !validateFingerPrint(user.token, scanFinger(user)) ==> !accessGranted && !user.token.valid;
-	ensures !user.token.valid || !validateClearanceLevel(user.token, door) ==> !accessGranted;
+	ensures user.token.valid && ValidateFingerPrint(user.token, ScanFinger(user)) && ValidateClearanceLevel(user.token, door) ==> accessGranted && user.token.valid;
+	ensures !user.token.valid ==> !accessGranted && !user.token.valid;
+	ensures !ValidateFingerPrint(user.token, ScanFinger(user)) ==> !accessGranted && !user.token.valid;
+	ensures !ValidateClearanceLevel(user.token, door) ==> !accessGranted;
 	{
 		if (user.token.valid)
 		{
-			var validFingerPrint := validateFingerPrint(user.token, scanFinger(user));
+			var validFingerPrint := ValidateFingerPrint(user.token, ScanFinger(user));
 			if (!validFingerPrint)
 			{
 				user.token.valid := false;
 				accessGranted := false;
 				return;
 			}
-			accessGranted := validateClearanceLevel(user.token, door);
+			accessGranted := ValidateClearanceLevel(user.token, door);
 		}
 		else
 		{
@@ -91,7 +92,7 @@ class EnrolmentStation {
 		}
 	}
 	
-	method printAccess(accessGranted : bool, tokenValid : bool)
+	method PrintAccess(accessGranted : bool, tokenValid : bool)
 	{
 		if (accessGranted)
 			{
@@ -107,7 +108,7 @@ class EnrolmentStation {
 		}
 	}
 	
-	method main()
+	method Main()
 	{
 		var clearanceLevelHigh := 3;
 		var clearanceLevelMedium := 2;
@@ -118,19 +119,19 @@ class EnrolmentStation {
 		var enrolmentStation := new EnrolmentStation;
 		
 		var user1 := new User.Init(1, token1);
-			var accessGranted := enrolmentStation.enterDoor(user1, door1);
+		var accessGranted := enrolmentStation.EnterDoor(user1, door1);
 		print "user1 with right fingerprint tries to access door1 with token1 (Clearance level enough):\n";
-		printAccess(accessGranted, token1.valid);
+		PrintAccess(accessGranted, token1.valid);
 		
 		var user2 := new User.Init(2, token1);
-		accessGranted := enrolmentStation.enterDoor(user2, door1);
+		accessGranted := enrolmentStation.EnterDoor(user2, door1);
 		print "user2 with wrong fingerprint tries to access door1 with token1 (Clearance level enough):\n";
-		printAccess(accessGranted, token1.valid);
+		PrintAccess(accessGranted, token1.valid);
 		
 		var user3 := new User.Init(1, token1);
-		accessGranted := enrolmentStation.enterDoor(user2, door1);
-		print "user1 with right fingerprint tries to access door1 with token1 (Clearance level enough) again:\n";
-		printAccess(accessGranted, token1.valid);
+		accessGranted := enrolmentStation.EnterDoor(user2, door1);
+		print "user1 with right fingerprint tries to access door1 with token1 again (Clearance level enough):\n";
+		PrintAccess(accessGranted, token1.valid);
 	
 	}
 }
