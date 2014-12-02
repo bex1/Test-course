@@ -13,13 +13,17 @@ class LimitedStack{
       }
 
       predicate Empty()
-      reads this`top;
+	  reads this;
+      // reads this`top; Kompilatorn klagade på detta. Får meddelandet:
+	  // Error in a ghost context, only ghost fields can be mentioned as frame targets
       {
         top == -1
       }
 
       predicate Full()
-      reads this`top, this`capacity;
+	  reads this;
+      // reads this`top, this`capacity;  Kompilatorn klagade på detta. Får meddelandet:
+	  // Error in a ghost context, only ghost fields can be mentioned as frame targets
       {
         top == capacity - 1
       }
@@ -45,7 +49,7 @@ class LimitedStack{
       // Returns the top element of the stack, without removing it.
       method Peek() returns (elem : int)
       requires Valid() && !Empty();
-      ensures Valid() &&  arr[top] == elem; //  top == old(top)  is prolly unessesary since we have no modifies clause anyways. Was removed.
+      ensures Valid() &&  arr[top] == elem;
       {
         elem := arr[top];
       }
@@ -65,7 +69,7 @@ class LimitedStack{
       method Pop() returns (elem : int)
       modifies this`top;
       requires Valid() && !Empty();
-      ensures Valid() && top == old(top) - 1 && old(arr[top]) == elem; // from Martin, vi får komma överens om vilken vi ska ta :) svar: Tog din!
+      ensures Valid() && top == old(top) - 1 && old(arr[top]) == elem;
       {
         elem := Peek(); 
 		top := top - 1;
@@ -80,13 +84,13 @@ class LimitedStack{
       {
 		var index := 0;
 		while (index  < capacity - 1) 
-			invariant 0 <= index  < capacity;
-			invariant forall k :: 0 <= k < index  ==>  arr[k] == old(arr[k+1]); //  denna behöver justeras. Så jäkla skumt att det inte funkar nu :(
+		  invariant 0 <= index  < capacity;
+		  invariant forall k :: 0 <= k < index  ==>  arr[k] == old(arr[k+1]); //  denna behöver justeras. Så jäkla skumt att det inte funkar nu :(
 	    {
 		  arr[index] := arr[index+1];
 		  index := index + 1;
-		 }
-		 arr[top] := elem;
+		}
+		arr[top] := elem;
 	  }
 
 // When you are finished,  all the below assertions should be provable. 
@@ -95,10 +99,10 @@ class LimitedStack{
            var s := new LimitedStack;
            s.Init(3);
 
-           assert s.Empty && !s.Full; 
+           assert s.Empty() && !s.Full(); 
 
            s.Push(27);
-           assert !s.Empty;
+           assert !s.Empty();
 
            var e := s.Pop();
            assert e == 27;
@@ -106,10 +110,10 @@ class LimitedStack{
            s.Push(5);
            s.Push(32);
            s.Push(9);
-           assert s.Full;
+           assert s.Full();
 
            var e2 := s.Pop();
-           assert e2 == 9 && !s.Full; 
+           assert e2 == 9 && !s.Full(); 
            assert s.arr[0] == 5;
 
            s.Push(e2);
@@ -119,6 +123,6 @@ class LimitedStack{
            assert e3 == 99;
            assert s.arr[0] == 32;
                      
-       }
+      }
 
 }
