@@ -3,35 +3,22 @@ class Token {
 	var clearanceLevel : int;
 	var valid : bool;
 	
-	method Init(fingerprintData : int, clearanceLevelData : int)
+	method Init(fingerprint : int, clearanceLevel : int)
 	modifies this;
-	ensures fingerprint == fingerprintData && clearanceLevel == clearanceLevelData && valid == true;
+	ensures this.fingerprint == fingerprint && this.clearanceLevel == clearanceLevel && valid == true;
 	{
-		fingerprint := fingerprintData;
-		clearanceLevel := clearanceLevelData;
+		this.fingerprint := fingerprint;
+		this.clearanceLevel := clearanceLevel;
 		valid := true;
 	}
 }
 
-class User{
-	var token : Token;
-	var fingerprint : int;
-	
-	method Init(token: Token, fingerprint : int)
-	modifies this;
-	requires token != null;
-	ensures this.token == token && this.fingerprint == fingerprint;
-	{
-		this.token := token;
-		this.fingerprint := fingerprint;
-	}
-	
-}
-
-
-
 class Door {
 	var requiredClearanceLevel : int;
+
+	static function method HIGH(): int {3} // Constant are functions that always return the same value
+	static function method MEDIUM(): int {2}
+	static function method LOW(): int {1}
 	
 	method Init(requiredClearanceLevel : int)
 	modifies this;
@@ -41,12 +28,22 @@ class Door {
 	}
 }
 
-class EnrolmentStation {
-	var users : set<User>;
+class User {
+	var token : Token;
+	var fingerprint : int;
 	
-	function HIGH(): int {3} // Constant are functions that always return the same value
-	function MEDIUM(): int {2}
-	function LOW(): int {1}
+	method Init(fingerprint : int, token: Token)
+	modifies this;
+	requires token != null;
+	ensures this.fingerprint == fingerprint && this.token == token;
+	{
+		this.fingerprint := fingerprint;
+		this.token := token;
+	}
+}
+
+class EnrolmentStation {
+	var users : set<User>; //behövs denna??
 	
 	function method scanFinger(user : User) : int
 	reads user;
@@ -86,8 +83,25 @@ class EnrolmentStation {
 			accessGranted := false;
 			return;
 		}
-		
 		accessGranted := validateClearanceLevel(user.token, door);
+	}
+	
+	method Main()
+	{
+		var clearanceLevelHigh := 3;
+		var token1 := new Token.Init(1, clearanceLevelHigh);
+		var door1 := new Door.Init(clearanceLevelHigh);
+		var user1 := new User.Init(1, token1);
+		var enrolmentStation1 := new EnrolmentStation;
+		var accessGranted := enrolmentStation1.enterDoor(user1, door1);
+		if (accessGranted)
+		{
+			print "Access granted";
+		}
+		else
+		{
+			print "Access denied";
+		}
 		
 	}
 	
