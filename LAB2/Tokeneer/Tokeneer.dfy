@@ -86,21 +86,46 @@ class EnrolmentStation {
 		accessGranted := validateClearanceLevel(user.token, door);
 	}
 	
-	method Main()
+	method printAccess(accessGranted : bool, tokenValid : bool)
 	{
-		var clearanceLevelHigh := 3;
-		var token1 := new Token.Init(1, clearanceLevelHigh);
-		var door1 := new Door.Init(clearanceLevelHigh);
-		var user1 := new User.Init(1, token1);
-		var enrolmentStation1 := new EnrolmentStation;
-		var accessGranted := enrolmentStation1.enterDoor(user1, door1);
 		if (accessGranted)
-		{
-			print "Access granted";
+			{
+				print "Access granted!\n\n";
+			}
+			else
+			{
+				print "Access denied!\n";
+			if (!tokenValid)
+			{
+				print "Token invalid!\n\n";
+			}
 		}
-		else
+	}
+	
+		method main()
 		{
-			print "Access denied";
-		}
+			var clearanceLevelHigh := 3;
+		var clearanceLevelMedium := 2;
+		var clearanceLevelLow := 1;
+		
+			var token1 := new Token.Init(1, clearanceLevelHigh);
+			var door1 := new Door.Init(clearanceLevelHigh);
+			var enrolmentStation := new EnrolmentStation;
+		
+		var user1 := new User.Init(1, token1);
+			var accessGranted := enrolmentStation.enterDoor(user1, door1);
+		print "user1 with right fingerprint tries to access door1 with token1 (Clearance level enough):\n";
+		printAccess(accessGranted, token1.valid);
+		
+		var user2 := new User.Init(2, token1);
+		accessGranted := enrolementStation.enterDoor(user2, door1);
+		print "user2 with wrong fingerprint tries to access door1 with token1 (Clearance level enough):\n";
+		printAccess(accessGranted, token1.valid);
+		
+		var user3 := new User.Init(1, token1);
+		accessGranted := enrolementStation.enterDoor(user2, door1);
+		print "user1 with right fingerprint tries to access door1 with token1 (Clearance level enough) again:\n";
+		printAccess(accessGranted, token1.valid);
+    
 	}
 }
