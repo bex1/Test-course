@@ -129,9 +129,26 @@ class EnrolmentStation {
 		PrintAccess(accessGranted, token1.valid);
 		
 		var user3 := new User.Init(1, token1);
-		accessGranted := enrolmentStation.EnterDoor(user2, door1);
-		print "user1 with right fingerprint tries to access door1 with token1 again (Clearance level enough):\n";
+		accessGranted := enrolmentStation.EnterDoor(user3, door1);
+		print "user3 with right fingerprint tries to access door1 with token1 again with invalid token (Clearance level enough):\n";
 		PrintAccess(accessGranted, token1.valid);
+		
+		var token2 := new Token.Init(1, clearanceLevelMedium);
+		
+		var user4 := new User.Init(1, token2);
+		accessGranted := enrolmentStation.EnterDoor(user4, door1);
+		print "user4 with right fingerprint tries to access door1 with token2 (Clearance level to low):\n";
+		PrintAccess(accessGranted, token2.valid);
+		
+		var door2 := new Door.Init(clearanceLevelMedium);
+		accessGranted := enrolmentStation.EnterDoor(user4, door2);
+		print "user4 with right fingerprint tries to access door2 with token2 (Clearance level enough):\n";
+		PrintAccess(accessGranted, token2.valid);
+		
+		var door3 := new Door.Init(clearanceLevelLow);
+		accessGranted := enrolmentStation.EnterDoor(user4, door3);
+		print "user4 with right fingerprint tries to access door3 with token2 (Clearance level more than needed):\n";
+		PrintAccess(accessGranted, token2.valid);
 	
 	}
 }
