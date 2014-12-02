@@ -105,6 +105,10 @@ class EnrolmentStation {
 			{
 				print "Token invalid!\n\n";
 			}
+			else
+			{
+				print "\n";
+			}
 		}
 	}
 	
