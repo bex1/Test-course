@@ -14,6 +14,14 @@ class User{
 class Token {
 	var fingerprint : int;
 	var clearanceLevel : int;
+	
+	constructor(fingerprintData : int, clearanceLevelData : int)
+	modifies this;
+	ensures fingerprint == fingerprintData && clearanceLevel == clearanceLevelData;
+	{
+		fingerprint := fingerprintData;
+		clearanceLevel := clearanceLevelData;
+	}
 }
 
 class Door {
