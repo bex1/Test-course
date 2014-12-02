@@ -1,3 +1,46 @@
+class Token {
+	var fingerprint : int;
+	var clearanceLevel : int;
+	var valid : bool;
+	
+	method Init(fingerprintData : int, clearanceLevelData : int)
+	modifies this;
+	ensures fingerprint == fingerprintData && clearanceLevel == clearanceLevelData && valid == true;
+	{
+		fingerprint := fingerprintData;
+		clearanceLevel := clearanceLevelData;
+		valid := true;
+	}
+}
+
+class User{
+	var token : Token;
+	var fingerprint : int;
+	
+	method Init(token: Token, fingerprint : int)
+	modifies this;
+	requires token != null;
+	ensures this.token == token && this.fingerprint == fingerprint;
+	{
+		this.token := token;
+		this.fingerprint := fingerprint;
+	}
+	
+}
+
+
+
+class Door {
+	var requiredClearanceLevel : int;
+	
+	method Init(requiredClearanceLevel : int)
+	modifies this;
+	ensures this.requiredClearanceLevel == requiredClearanceLevel;
+	{
+		this.requiredClearanceLevel := requiredClearanceLevel;
+	}
+}
+
 class EnrolmentStation {
 	var users : set<User>;
 	
@@ -5,28 +48,80 @@ class EnrolmentStation {
 	function MEDIUM(): int {2}
 	function LOW(): int {1}
 	
-}
-
-class User{
-	var token : Token;
-}
-
-class Token {
-	var fingerprint : int;
-	var clearanceLevel : int;
-	
-	constructor(fingerprintData : int, clearanceLevelData : int)
-	modifies this;
-	ensures fingerprint == fingerprintData && clearanceLevel == clearanceLevelData;
+	function method scanFinger(user : User) : int
+	reads user;
+	requires user != null;
 	{
-		fingerprint := fingerprintData;
-		clearanceLevel := clearanceLevelData;
+		user.fingerprint
 	}
+	
+	function method validateFingerPrint(token : Token, scannedFingerprint : int) : bool
+	reads token;
+	requires token != null;
+	{
+		token.fingerprint == scannedFingerprint
+	}
+	
+	function method validateClearanceLevel(token : Token, door : Door) : bool
+	reads token, door;
+	requires token != null;
+	requires door != null;
+	{
+		token.clearanceLevel >= door.requiredClearanceLevel
+	}
+  
+	method enterDoor(user : User, door : Door) returns (accessGranted : bool)
+	modifies user.token`valid;
+	requires user != null && user.token != null && door != null;
+	requires user.token.valid;
+	ensures validateFingerPrint(user.token, scanFinger(user)) && validateClearanceLevel(user.token, door) ==> accessGranted;
+	ensures validateFingerPrint(user.token, scanFinger(user)) ==> user.token.valid;
+	ensures !validateFingerPrint(user.token, scanFinger(user)) ==> !accessGranted && !user.token.valid;
+	ensures !validateClearanceLevel(user.token, door) ==> !accessGranted;
+	{
+		var validFingerPrint := validateFingerPrint(user.token, scanFinger(user));
+		if (!validFingerPrint)
+		{
+			user.token.valid := false;
+			accessGranted := false;
+			return;
+		}
+		
+		accessGranted := validateClearanceLevel(user.token, door);
+		
+	}
+	
+	/*
+	method validateFingerPrint(token : Token, scannedFingerprint : int) returns (validFingerPrint : bool)
+	modifies token`valid;
+	requires token != null;
+	ensures token.fingerprint == scannedFingerprint ==> validFingerPrint;
+	ensures token.fingerprint != scannedFingerprint ==> !token.valid && !validFingerPrint;
+	{
+		if (token.fingerprint == scannedFingerprint)
+		{
+			validFingerPrint := true;
+		}
+		else
+		{
+			token.valid := false;
+			validFingerPrint := false;
+		}
+	}
+	*/
+	/*
+	method validateClearanceLevel(token : Token, door : Door) returns (validClearanceLevel : bool)
+	requires token != null;
+	requires door != null;
+	ensures token.clearanceLevel >= door.requiredClearanceLevel ==> validClearanceLevel;
+	ensures token.clearanceLevel < door.requiredClearanceLevel ==> !validClearanceLevel;
+	{
+		validClearanceLevel := token.clearanceLevel >= door.requiredClearanceLevel;
+	}
+	*/
 }
 
-class Door {
-	var requiredClearanceLevel : int;
-}
+
 
 /*
 method Init:
