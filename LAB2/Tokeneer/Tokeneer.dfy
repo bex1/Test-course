@@ -1,10 +1,9 @@
 class EnrolmentStation {
 	var users : set<User>;
-
-	// Dunno where to place these. And how do one specify constants?
-	var HIGH  : int;
-	var MEDIUM : int;
-	var LOW : int;
+	
+	function HIGH(): int {3} // Constant are functions that always return the same value
+	function MEDIUM(): int {2}
+	function LOW(): int {1}
 	
 }
 
