@@ -14,16 +14,12 @@ class LimitedStack{
 
       predicate Empty()
 	  reads this;
-      // reads this`top; Kompilatorn klagade på detta. Får meddelandet:
-	  // Error in a ghost context, only ghost fields can be mentioned as frame targets
       {
         top == -1
       }
 
       predicate Full()
 	  reads this;
-      // reads this`top, this`capacity;  Kompilatorn klagade på detta. Får meddelandet:
-	  // Error in a ghost context, only ghost fields can be mentioned as frame targets
       {
         top == capacity - 1
       }
