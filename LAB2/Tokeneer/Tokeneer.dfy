@@ -150,6 +150,5 @@ class EnrolmentStation {
 		accessGranted := door3.EnterDoor(user4);
 		print "user4 with correct fingerprint tries to access door3 with token2 (Clearance level more than needed):\n";
 		PrintAccess(accessGranted, token2.valid);
-	
 	}
 }
