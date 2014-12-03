@@ -38,12 +38,6 @@ class Token {
 		this.clearanceLevel := clearanceLevel;
 		valid := true;
 	}
-	
-	function method ValidateFingerPrint(scannedFingerprint : int) : bool
-	reads this;
-	{
-		fingerprint == scannedFingerprint
-	}
 }
 
 class Door { // Aka ID Station
@@ -60,13 +54,13 @@ class Door { // Aka ID Station
 	method EnterDoor(user : User, fingerPrint : int) returns (accessGranted : bool)
 	modifies user.token`valid;
 	requires user != null && user.token != null;
-	ensures !old(user.token.valid) || !user.token.ValidateFingerPrint(fingerPrint) ==> !accessGranted && !user.token.valid;
-	ensures old(user.token.valid) && user.token.ValidateFingerPrint(fingerPrint) && ValidateClearanceLevel(user.token) ==> accessGranted && user.token.valid;
-	ensures old(user.token.valid) && user.token.ValidateFingerPrint(fingerPrint) && !ValidateClearanceLevel(user.token) ==> !accessGranted && user.token.valid;
+	ensures !old(user.token.valid) || !ValidateFingerPrint(user.token, fingerPrint) ==> !accessGranted && !user.token.valid;
+	ensures old(user.token.valid) && ValidateFingerPrint(user.token, fingerPrint) && ValidateClearanceLevel(user.token) ==> accessGranted && user.token.valid;
+	ensures old(user.token.valid) && ValidateFingerPrint(user.token, fingerPrint) && !ValidateClearanceLevel(user.token) ==> !accessGranted && user.token.valid;
 	{
 		if (user.token.valid)
 		{
-			var validFingerPrint := user.token.ValidateFingerPrint(fingerPrint);
+			var validFingerPrint := ValidateFingerPrint(user.token, fingerPrint);
 			if (!validFingerPrint)
 			{
 				user.token.valid := false;
@@ -86,6 +80,13 @@ class Door { // Aka ID Station
 	requires token != null;
 	{
 		token.clearanceLevel >= requiredClearanceLevel
+	}
+
+	function method ValidateFingerPrint(token : Token, scannedFingerprint : int) : bool
+	reads token;
+	requires token != null;
+	{
+		token.fingerprint == scannedFingerprint
 	}
 }
 
