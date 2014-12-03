@@ -78,14 +78,11 @@ class LimitedStack{
       ensures Valid() && arr[top] == elem;
       ensures forall k :: 0 <= k < capacity - 1 ==> arr[k] == old(arr[k+1]);
       {
-		var index := 0;
-		while (index  < capacity - 1) 
-		  invariant 0 <= index  < capacity;
-		  invariant forall k :: 0 <= k < index  ==>  arr[k] == old(arr[k+1]); //  denna behöver justeras. Så jäkla skumt att det inte funkar nu :(
-	    {
-		  arr[index] := arr[index+1];
-		  index := index + 1;
+		forall (i | 0 <= i < capacity - 1)
+		{
+			arr[i] := arr[i+1];
 		}
+		
 		arr[top] := elem;
 	  }
 
