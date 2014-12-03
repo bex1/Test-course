@@ -57,16 +57,16 @@ class Door { // Aka ID Station
 		this.requiredClearanceLevel := requiredClearanceLevel;
 	}
 	
-	method EnterDoor(user : User) returns (accessGranted : bool)
+	method EnterDoor(user : User, fingerPrint : int) returns (accessGranted : bool)
 	modifies user.token`valid;
 	requires user != null && user.token != null;
-	ensures !old(user.token.valid) || !user.token.ValidateFingerPrint(user.ScanFinger()) ==> !accessGranted && !user.token.valid;
-	ensures old(user.token.valid) && user.token.ValidateFingerPrint(user.ScanFinger()) && ValidateClearanceLevel(user.token) ==> accessGranted && user.token.valid;
-	ensures old(user.token.valid) && user.token.ValidateFingerPrint(user.ScanFinger()) && !ValidateClearanceLevel(user.token) ==> !accessGranted && user.token.valid;
+	ensures !old(user.token.valid) || !user.token.ValidateFingerPrint(fingerPrint) ==> !accessGranted && !user.token.valid;
+	ensures old(user.token.valid) && user.token.ValidateFingerPrint(fingerPrint) && ValidateClearanceLevel(user.token) ==> accessGranted && user.token.valid;
+	ensures old(user.token.valid) && user.token.ValidateFingerPrint(fingerPrint) && !ValidateClearanceLevel(user.token) ==> !accessGranted && user.token.valid;
 	{
 		if (user.token.valid)
 		{
-			var validFingerPrint := user.token.ValidateFingerPrint(user.ScanFinger());
+			var validFingerPrint := user.token.ValidateFingerPrint(fingerPrint);
 			if (!validFingerPrint)
 			{
 				user.token.valid := false;
@@ -91,22 +91,14 @@ class Door { // Aka ID Station
 
 class User {
 	var token : Token;
-	var fingerprint : int;
 	
-	method Init(fingerprint : int)
+	method Init()
 	modifies this;
-	ensures this.fingerprint == fingerprint;
 	ensures this.token == null;
 	{
-		this.fingerprint := fingerprint;
 		this.token := null;
 	}
-	
-	function method ScanFinger() : int
-	reads this;
-	{
-		fingerprint
-	}
+
 }
 
 class EnrolmentStation {
@@ -120,11 +112,10 @@ class EnrolmentStation {
 		users := {};
 	}
 	
-	// TODO använd denna i tester! löser både (1) och (2) i specc.
+	//  löser både (1) och (2) i specc.
 	method Enrol(user : User, clearanceLevel : int, fingerPrint : int) 
 	modifies this, user`token, user.token;
 	requires user != null && user.token == null;
-	requires user.fingerprint == fingerPrint;
 	requires clearanceLevel == HIGH() || clearanceLevel == MEDIUM() || clearanceLevel == LOW();
 	requires user !in users; 
 	ensures users == old(users) + {user}; 
@@ -139,26 +130,6 @@ class EnrolmentStation {
 	}
 }
 
-method PrintAccess(accessGranted : bool, tokenValid : bool)
-{
-	if (accessGranted)
-		{
-			print "Access granted!\n\n";
-		}
-		else
-		{
-			print "Access denied!\n";
-		if (!tokenValid)
-		{
-			print "Token invalid!\n\n";
-		}
-		else
-		{
-			print "\n";
-		}
-	}
-}
-
 method Main() // TODO ska nog använda asserts här istället för prints som i excercises
 {
 		// Enrolment station
@@ -170,107 +141,146 @@ method Main() // TODO ska nog använda asserts här istället för prints som i 
 		var doorLow := new Door.Init(LOW());
 
 		// Users
-		var userHigh1 := new User.Init(1);
-	    var userHigh2 := new User.Init(2);
-		var userMedium3 := new User.Init(3);
-	    var userMedium4 := new User.Init(4);
-	    var userLow5 := new User.Init(5);
-	    var userLow6 := new User.Init(6);
+		var userHigh1 := new User.Init();
+	    var userHigh2 := new User.Init();
+		var userMedium3 := new User.Init();
+	    var userMedium4 := new User.Init();
+	    var userLow5 := new User.Init();
+	    var userLow6 := new User.Init();
 
 
-		// Enrolment tests
+		// ******* Enrolment tests *******
 		enrolmentStation.Enrol(userHigh1, HIGH(), 1);
 
 		assert enrolmentStation.users == {userHigh1};
 		assert userHigh1.token.clearanceLevel == HIGH();
 		assert userHigh1.token.fingerprint == 1;
+		assert userHigh1.token.valid;
 
 		enrolmentStation.Enrol(userHigh2, HIGH(), 2);
 
 		assert enrolmentStation.users == {userHigh1, userHigh2};
 		assert userHigh2.token.clearanceLevel == HIGH();
 		assert userHigh2.token.fingerprint == 2;
+		assert userHigh2.token.valid;
 
 		enrolmentStation.Enrol(userMedium3, MEDIUM(), 3);
 
 		assert enrolmentStation.users == {userHigh1, userHigh2, userMedium3};
 		assert userMedium3.token.clearanceLevel == MEDIUM();
 		assert userMedium3.token.fingerprint == 3;
+		assert userMedium3.token.valid;
 
 		enrolmentStation.Enrol(userMedium4, MEDIUM(), 4);
 
 		assert enrolmentStation.users == {userHigh1, userHigh2, userMedium3, userMedium4};
 		assert userMedium4.token.clearanceLevel == MEDIUM();
 		assert userMedium4.token.fingerprint == 4;
+		assert userMedium4.token.valid;
 
 		enrolmentStation.Enrol(userLow5, LOW(), 5);
 
 		assert enrolmentStation.users == {userHigh1, userHigh2, userMedium3, userMedium4, userLow5};
 		assert userLow5.token.clearanceLevel == LOW();
 		assert userLow5.token.fingerprint == 5;
+		assert userLow5.token.valid;
 
 		enrolmentStation.Enrol(userLow6, LOW(), 6);
 
 		assert enrolmentStation.users == {userHigh1, userHigh2, userMedium3, userMedium4, userLow5, userLow6};
 		assert userLow6.token.clearanceLevel == LOW();
 		assert userLow6.token.fingerprint == 6;
+		assert userLow6.token.valid;
 
-		// Enter door tests
-		var accessGranted := doorHigh.EnterDoor(userHigh1);
+
+
+		// ******** Enter door tests ********
+
+		// ***Valid fingerprints***
+		
+		// High security door
+		var accessGranted := doorHigh.EnterDoor(userHigh1, 1);
 		assert userHigh1.token.valid;
 		assert accessGranted;
 
-		accessGranted := doorHigh.EnterDoor(userHigh2);
-		assert userHigh2.token.valid;
-		assert accessGranted;
-
-		accessGranted := doorHigh.EnterDoor(userMedium3);
+		accessGranted := doorHigh.EnterDoor(userMedium3, 3);
 		assert userMedium3.token.valid;
 		assert !accessGranted;
 
-		accessGranted := doorHigh.EnterDoor(userMedium4);
-		assert userMedium4.token.valid;
-		assert !accessGranted;
-
-		accessGranted := doorHigh.EnterDoor(userLow5);
+		accessGranted := doorHigh.EnterDoor(userLow5, 5);
 		assert userLow5.token.valid;
 		assert !accessGranted;
 
-		accessGranted := doorHigh.EnterDoor(userLow6);
-		assert userLow6.token.valid;
+		// Medium security door
+
+		accessGranted := doorMedium.EnterDoor(userHigh1, 1);
+		assert userHigh1.token.valid;
+		assert accessGranted;
+
+		accessGranted := doorMedium.EnterDoor(userMedium3, 3);
+		assert userMedium3.token.valid;
+		assert accessGranted;
+
+		accessGranted := doorMedium.EnterDoor(userLow5, 5);
+		assert userLow5.token.valid;
 		assert !accessGranted;
 
+		// Low security door
 
-		/*
-		var user1 := new User.Init(1, token1);
-		var accessGranted := door1.EnterDoor(user1);
-		print "user1 with correct fingerprint tries to access door1 with token1 (Clearance level enough):\n";
-		PrintAccess(accessGranted, token1.valid);
-		
-		var user2 := new User.Init(2, token1);
-		accessGranted := door1.EnterDoor(user2);
-		print "user2 with wrong fingerprint tries to access door1 with token1 (Clearance level enough):\n";
-		PrintAccess(accessGranted, token1.valid);
+		accessGranted := doorLow.EnterDoor(userHigh1, 1);
+		assert userHigh1.token.valid;
+		assert accessGranted;
 
-		var user3 := new User.Init(1, token1);
-		accessGranted := door1.EnterDoor(user3);
-		print "user3 with correct fingerprint tries to access door1 with token1 again with invalid token (Clearance level enough):\n";
-		PrintAccess(accessGranted, token1.valid);
+		accessGranted := doorLow.EnterDoor(userMedium3, 3);
+		assert userMedium3.token.valid;
+		assert accessGranted;
+
+		accessGranted := doorLow.EnterDoor(userLow5, 5);
+		assert userLow5.token.valid;
+		assert accessGranted;
+
+
+
+		// ***Invalid fingerprints***
 		
-		var token2 := new Token.Init(1, clearanceLevelMedium);
-		
-		var user4 := new User.Init(1, token2);
-		accessGranted := door1.EnterDoor(user4);
-		print "user4 with correct fingerprint tries to access door1 with token2 (Clearance level to low):\n";
-		PrintAccess(accessGranted, token2.valid);
-		
-		var door2 := new Door.Init(clearanceLevelMedium);
-		accessGranted := door2.EnterDoor(user4);
-		print "user4 with correct fingerprint tries to access door2 with token2 (Clearance level enough):\n";
-		PrintAccess(accessGranted, token2.valid);
-		
-		var door3 := new Door.Init(clearanceLevelLow);
-		accessGranted := door3.EnterDoor(user4);
-		print "user4 with correct fingerprint tries to access door3 with token2 (Clearance level more than needed):\n";
-		PrintAccess(accessGranted, token2.valid);*/
+		// High security door
+		accessGranted := doorHigh.EnterDoor(userHigh2, 1);
+		assert !userHigh2.token.valid;
+		assert !accessGranted;
+
+		accessGranted := doorHigh.EnterDoor(userMedium4, 3);
+		assert !userMedium4.token.valid;
+		assert !accessGranted;
+
+		accessGranted := doorHigh.EnterDoor(userLow6, 5);
+		assert !userLow6.token.valid;
+		assert !accessGranted;
+
+		// Medium security door
+
+		accessGranted := doorMedium.EnterDoor(userHigh2, 1);
+		assert !userHigh2.token.valid;
+		assert !accessGranted;
+
+		accessGranted := doorMedium.EnterDoor(userMedium4, 3);
+		assert !userMedium4.token.valid;
+		assert !accessGranted;
+
+		accessGranted := doorMedium.EnterDoor(userLow6, 5);
+		assert !userLow6.token.valid;
+		assert !accessGranted;
+
+		// Low security door
+
+		accessGranted := doorLow.EnterDoor(userHigh2, 1);
+		assert !userHigh2.token.valid;
+		assert !accessGranted;
+
+		accessGranted := doorLow.EnterDoor(userMedium4, 3);
+		assert !userMedium4.token.valid;
+		assert !accessGranted;
+
+		accessGranted := doorLow.EnterDoor(userLow6, 5);
+		assert !userLow6.token.valid;
+		assert !accessGranted;
 }
