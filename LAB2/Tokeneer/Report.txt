@@ -1,0 +1,4 @@
+In addition to your Dafny source code, you will also submit a brief report motivating your design decisions and specifications (at most one page of A4).
+
+
+As a first step when developing this program we devided different parts of the system into classes since Dafny is an object-oriented language.
