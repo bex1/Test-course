@@ -87,7 +87,7 @@ class User {
 }
 
 class EnrolmentStation {
-	var users : set<User>; //behövs denna?? Svar: Ja, för enrolment. kolla (1) och (2) i specifikationen överst 
+	var users : set<User>;
 
 	method Init()
 	modifies this;
@@ -97,7 +97,6 @@ class EnrolmentStation {
 		users := {};
 	}
 	
-	//  löser både (1) och (2) i specc.
 	method Enrol(user : User, clearanceLevel : int, fingerPrint : int) 
 	modifies this, user`token, user.token;
 	requires user != null && user.token == null;
@@ -115,7 +114,7 @@ class EnrolmentStation {
 	}
 }
 
-method Main() // TODO ska nog använda asserts här istället för prints som i excercises
+method Main()
 {
 		// Enrolment station
 		var enrolmentStation := new EnrolmentStation.Init();
