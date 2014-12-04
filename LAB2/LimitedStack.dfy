@@ -65,7 +65,7 @@ class LimitedStack{
       method Pop() returns (elem : int)
       modifies this`top;
       requires Valid() && !Empty();
-      ensures Valid() && top == old(top) - 1 && old(arr[top]) == elem;
+      ensures Valid() && top == old(top) - 1 && old(arr[top]) == elem && !Full();
       {
         elem := Peek(); 
 		top := top - 1;
@@ -75,7 +75,8 @@ class LimitedStack{
       method Push2(elem : int)
 	  modifies this.arr;
       requires Valid() && Full();
-      ensures Valid() && arr[top] == elem;
+      ensures Valid() && arr[top] == elem && Full();
+	  ensures arr.Length == old(arr).Length;
       ensures forall k :: 0 <= k < capacity - 1 ==> arr[k] == old(arr[k+1]);
       {
 		forall (i | 0 <= i < capacity - 1)
