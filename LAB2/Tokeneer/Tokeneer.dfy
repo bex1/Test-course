@@ -42,21 +42,23 @@ class Token {
 
 class Door { // Aka ID Station
 	var requiredClearanceLevel : int;
+	var alarmOn : bool;
 	
 	method Init(requiredClearanceLevel : int)
 	modifies this;
 	requires requiredClearanceLevel == HIGH() || requiredClearanceLevel == MEDIUM() || requiredClearanceLevel == LOW();
-	ensures this.requiredClearanceLevel == requiredClearanceLevel;
+	ensures this.requiredClearanceLevel == requiredClearanceLevel && !alarmOn;
 	{
 		this.requiredClearanceLevel := requiredClearanceLevel;
+		alarmOn := false;
 	}
 	
 	method EnterDoor(user : User, fingerPrint : int) returns (accessGranted : bool)
-	modifies user.token`valid;
+	modifies user.token`valid, `alarmOn;
 	requires user != null && user.token != null;
-	ensures !old(user.token.valid) || !ValidateFingerPrint(user.token, fingerPrint) ==> !accessGranted && !user.token.valid;
-	ensures old(user.token.valid) && ValidateFingerPrint(user.token, fingerPrint) && ValidateClearanceLevel(user.token) ==> accessGranted && user.token.valid;
-	ensures old(user.token.valid) && ValidateFingerPrint(user.token, fingerPrint) && !ValidateClearanceLevel(user.token) ==> !accessGranted && user.token.valid;
+	ensures !old(user.token.valid) || !ValidateFingerPrint(user.token, fingerPrint) ==> !accessGranted && !user.token.valid && alarmOn;
+	ensures old(user.token.valid) && ValidateFingerPrint(user.token, fingerPrint) && ValidateClearanceLevel(user.token) ==> accessGranted && user.token.valid && !alarmOn;
+	ensures old(user.token.valid) && ValidateFingerPrint(user.token, fingerPrint) && !ValidateClearanceLevel(user.token) ==> !accessGranted && user.token.valid && !alarmOn;
 	{
 		if (user.token.valid)
 		{
@@ -64,14 +66,17 @@ class Door { // Aka ID Station
 			if (!validFingerPrint)
 			{
 				user.token.valid := false;
+				alarmOn := true;
 				accessGranted := false;
 				return;
 			}
 			accessGranted := ValidateClearanceLevel(user.token);
+			alarmOn := false;
 		}
 		else
 		{
 			accessGranted := false;
+			alarmOn := true;
 		}
 	}
 	
@@ -203,42 +208,51 @@ method Main() // TODO ska nog använda asserts här istället för prints som i 
 		var accessGranted := doorHigh.EnterDoor(userHigh1, 1);
 		assert userHigh1.token.valid;
 		assert accessGranted;
+		assert !doorHigh.alarmOn;
 
 		accessGranted := doorHigh.EnterDoor(userMedium3, 3);
 		assert userMedium3.token.valid;
 		assert !accessGranted;
+		assert !doorHigh.alarmOn;
 
 		accessGranted := doorHigh.EnterDoor(userLow5, 5);
 		assert userLow5.token.valid;
 		assert !accessGranted;
+		assert !doorHigh.alarmOn;
 
 		// Medium security door
 
 		accessGranted := doorMedium.EnterDoor(userHigh1, 1);
 		assert userHigh1.token.valid;
 		assert accessGranted;
+		assert !doorMedium.alarmOn;
 
 		accessGranted := doorMedium.EnterDoor(userMedium3, 3);
 		assert userMedium3.token.valid;
 		assert accessGranted;
+		assert !doorMedium.alarmOn;
 
 		accessGranted := doorMedium.EnterDoor(userLow5, 5);
 		assert userLow5.token.valid;
 		assert !accessGranted;
+		assert !doorMedium.alarmOn;
 
 		// Low security door
 
 		accessGranted := doorLow.EnterDoor(userHigh1, 1);
 		assert userHigh1.token.valid;
 		assert accessGranted;
+		assert !doorLow.alarmOn;
 
 		accessGranted := doorLow.EnterDoor(userMedium3, 3);
 		assert userMedium3.token.valid;
 		assert accessGranted;
+		assert !doorLow.alarmOn;
 
 		accessGranted := doorLow.EnterDoor(userLow5, 5);
 		assert userLow5.token.valid;
 		assert accessGranted;
+		assert !doorLow.alarmOn;
 
 
 
@@ -248,40 +262,49 @@ method Main() // TODO ska nog använda asserts här istället för prints som i 
 		accessGranted := doorHigh.EnterDoor(userHigh2, 1);
 		assert !userHigh2.token.valid;
 		assert !accessGranted;
+		assert doorHigh.alarmOn;
 
 		accessGranted := doorHigh.EnterDoor(userMedium4, 3);
 		assert !userMedium4.token.valid;
 		assert !accessGranted;
+		assert doorHigh.alarmOn;
 
 		accessGranted := doorHigh.EnterDoor(userLow6, 5);
 		assert !userLow6.token.valid;
 		assert !accessGranted;
+		assert doorHigh.alarmOn;
 
 		// Medium security door
 
 		accessGranted := doorMedium.EnterDoor(userHigh2, 1);
 		assert !userHigh2.token.valid;
 		assert !accessGranted;
+		assert doorMedium.alarmOn;
 
 		accessGranted := doorMedium.EnterDoor(userMedium4, 3);
 		assert !userMedium4.token.valid;
 		assert !accessGranted;
+		assert doorMedium.alarmOn;
 
 		accessGranted := doorMedium.EnterDoor(userLow6, 5);
 		assert !userLow6.token.valid;
 		assert !accessGranted;
+		assert doorMedium.alarmOn;
 
 		// Low security door
 
 		accessGranted := doorLow.EnterDoor(userHigh2, 1);
 		assert !userHigh2.token.valid;
 		assert !accessGranted;
+		assert doorLow.alarmOn;
 
 		accessGranted := doorLow.EnterDoor(userMedium4, 3);
 		assert !userMedium4.token.valid;
 		assert !accessGranted;
+		assert doorLow.alarmOn;
 
 		accessGranted := doorLow.EnterDoor(userLow6, 5);
 		assert !userLow6.token.valid;
 		assert !accessGranted;
+		assert doorLow.alarmOn;
 }
