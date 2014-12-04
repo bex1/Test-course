@@ -1,24 +1,3 @@
-/*
-While the real system has a very large specification, this question asks you to model a 
-high-level mini-version of the Tokeneer system in Dafny and verify its correctness. 
-
-The picture below shows the secure door system you are to model and verify. 
-
-To enter the door,
-*********** the user first needs to enrol and receive a token <--- TODO (1) ******************, which stores fingerprint data (for 
- simplicity, you may assume fingerprints are represented by integers) and the security clearance 
- level (there are three clearance levels: Low, Medium and High). 
-
- ************* The enrolment station keeps track of the users in the system to make sure no one can be issued with more than one token at the time. <--- TODO (2) *******************
-
-When a user wants to open a door, the ID station checks that the user's fingerprint agrees with 
-what is stored on the user's token and that the user have the adequate security clearance to enter 
-this door. 
-
-If a security breach is discovered, i.e. a token is used by the wrong person, this token 
-must be invalidated immediately and ************* the alarm sound. (3) <--- TODO ***********
-*/
-
 // Defined clearance levels
 static function method HIGH(): int {3} 
 static function method MEDIUM(): int {2}
