@@ -10,7 +10,11 @@ Group 4
 R = (0 <= y && (0 <= x ==> y == x) && x < 0 ==> y == -x)
 
 wp(if x < 0 then y := -x else y := x, R)
+[Conditional rule]
 (x < 0 ==> wp(y := -x, R)) && (!(x < 0) ==> wp(y := x, R))
+[R = (0 <= y && (0 <= x ==> y == x) && x < 0 ==> y == -x)]
+(x < 0 ==> wp(y := -x, (0 <= y && (0 <= x ==> y == x) && x < 0 ==> y == -x))) && (!(x < 0) ==> wp(y := x, (0 <= y && (0 <= x ==> y == x) && x < 0 ==> y == -x)))
+[Assignment rule]
 (x < 0 ==> (0 <= -x && (0 <= x ==> -x == x) && x < 0 ==> -x == -x)) && (x >= 0) ==> (0 <= x && (0 <= x ==> x == x) && x < 0 ==> x == -x))
 
 Here we split up the expression and prove all to be correct:
@@ -45,12 +49,21 @@ b = big
 s = small
 R = b > s
 
-wp(if x > y then b := x && s := y else b := y && s := x, R)
-x > y ==> wp((b := x && s := y), R) && !(x > y) ==> wp((b := y && s := x), R)
-x > y ==> wp((b := x && s := y), b > s) && !(x > y) ==> wp((b := y && s := x), b > s)
+wp(if x > y then b := x; s := y else b := y; s := x, R)
+[Conditional rule]
+x > y ==> wp(b := x; s := y, R)         && !(x > y) ==> wp(b := y; s := x, R)
+[Sequential rule]
+x > y ==> wp(b := x, wp(s := y, R))     && !(x > y) ==> wp(b := y wp(s := x, R))
+[R = b > s]
+x > y ==> wp(b := x, wp(s := y, b > s)) && !(x > y) ==> wp(b := y wp(s := x, b > s))
+[Assignment rule]
+x > y ==> wp(b := x, b > y)             && !(x > y) ==> wp(b := y, b > x)
+[Assignment rule]
 
 x > y ==> x > y && !(x > y) ==> (y > x)
+[Logic]
 x > y ==> x > y && (x <= y) ==> (y > x)
+[Commutativity]
 x > y ==> x > y && (y => x) ==> (y > x)
 |_____________|    |__________________|
        |                     |
@@ -61,23 +74,37 @@ B is false! A counter example would be if y == x. That does not imply that y > x
 What the program misses is a precondition that x != y.
 
 **************************************************************************************************************************************************************
+			(x != y && x > y ==> wp((b := x; s := y), R))     && (x != y && !(x > y) ==> wp((b := y; s := x), R))
+			(R = b > s)
+			(x != y && x > y ==> wp((b := x; s := y), b > s)) && (x != y && !(x > y) ==> wp((b := y; s := x), b > s))
 
 2b.
 b = big
 s = small
 R = b > s
-wp(if x != y && x > y then b := x && s := y else b := y && s := x, R)
-(x != y && x > y ==> wp((b := x && s := y), R))   &&   (x != y && !(x > y) ==> wp((b := y && s := x), R))
-(x != y && x > y ==> wp((b := x && s := y), b > s)) && (x != y && !(x > y) ==> wp((b := y && s := x), b > s))
+wp(if x != y; x > y then b := x && s := y else b := y; s := x, R)
+[Conditional rule]
+(x != y && x > y ==> wp(b := x; s := y, R))         && (x != y && !(x > y) ==> wp(b := y; s := x, R))
+[Sequential rule]
+(x != y && x > y ==> wp(b := x, wp(s := y, R)))     && (x != y && !(x > y) ==> wp(b := y wp(s := x, R)))
+[R = b > s]
+(x != y && x > y ==> wp(b := x, wp(s := y, b > s))) && (x != y && !(x > y) ==> wp(b := y wp(s := x, b > s)))
+[Assignment rule]
+(x != y && x > y ==> wp(b := x, b > y)              && (x != y && !(x > y) ==> wp(b := y, b > x))
+[Assignment rule]
 
 (x != y && x > y ==> x > y) && (x != y && !(x > y) ==> (y > x))
+[Logic]
 (x != y && x > y ==> x > y) && (x != y && (x <= y) ==> (y > x))
+[If x != y and x <= y then x < y]
 (x != y && x > y ==> x > y) && ((x < y) ==> (y > x))
 |_________________________|    |______________________________|
              |                                 |
             = A                               = B
 A <-- Trivially true
 B <-- Trivially true
+
+Since A && B are both true the method is proven to fulfill the postcondition R when x != y.
 
 **************************************************************************************************************************************************************
 
