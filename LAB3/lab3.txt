@@ -1,0 +1,31 @@
+1.
+R = (0 <= y && (0 <= x ==> y == x) && x < 0 ==> y == -x)
+
+wp(if x < 0 then y := -x else y := x, R)
+(x < 0 ==> wp(y := -x, R)) && (!(x < 0) ==> wp(y := x, R))
+(x < 0 ==> (0 <= -x && (0 <= x ==> -x == x) && x < 0 ==> -x == -x)) && (x >= 0) ==> (0 <= x && (0 <= x ==> x == x) && x < 0 ==> x == -x))
+
+Here we split up the expression and prove all to be correct:
+A = (x < 0 ==> (0 <= -x && (0 <= x ==> -x == x) && x < 0 ==> -x == -x))
+B = (x >= 0) ==> (0 <= x && (0 <= x ==> x == x) && x < 0 ==> x == -x))
+
+Prove A && B from above:
+	For A:
+		x < 0 ==>
+			0 <= -x <-- Trivially true
+			&&
+			(0 <= x ==> -x == x) <-- Since x must be smaller than 0 the LHS will always be false. Hence implication is true.
+			&&
+			x < 0 ==> -x == -x <-- Trivially true
+	==> A is always true
+	
+	For B:
+		x >= 0 ==>
+			0 <= x <-- Trivially true
+			&&
+			(0 <= x ==> x == x) <-- Trivially true
+			&&
+			x < 0 ==> x == -x <-- Since x must be greater than 0 the LHS will always be false. Hence implication is true.
+	==> B is always true
+	
+Since A && B are both true the method is proven to fulfill the postcondition R.
