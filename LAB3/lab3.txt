@@ -41,7 +41,23 @@ Since A && B are both true the method is proven to fulfill the postcondition R.
 **************************************************************************************************************************************************************
 
 2a.
+b = big
+s = small
+R = b > s
 
+wp(if x > y then b := x && s := y else b := y && s := x, R)
+x > y ==> wp((b := x && s := y), R) && !(x > y) ==> wp((b := y && s := x), R)
+x > y ==> wp((b := x && s := y), b > s) && !(x > y) ==> wp((b := y && s := x), b > s)
+x > y ==> x > y && !(x > y) ==> (y > x)
+x > y ==> x > y && (x <= y) ==> (y > x)
+x > y ==> x > y && (y => x) ==> (y > x)
+|_____________|    |__________________|
+       |                     |
+      = A                   = B
+A <-- Trivially true
+B is false! A counter example would be if y == x. That does not imply that y > x.
+
+What the program misses is a precondition that x != y.
 
 **************************************************************************************************************************************************************
 
