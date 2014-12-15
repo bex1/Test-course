@@ -5,17 +5,16 @@ Group 4
 
 **************************************************************************************************************************************************************
 
+1.
+
 Setup:
 
 S = statements of the program
 Q = precondition
 R = postcondition
 
+What we want to prove:
 Q ==> wp(S, R)
-
-**************************************************************************************************************************************************************
-
-1.
 
 Q = True
 R = (0 <= y && (0 <= x ==> y == x) && x < 0 ==> y == -x)
@@ -60,6 +59,16 @@ True ==> True <-- Trivially true
 **************************************************************************************************************************************************************
 
 2a.
+
+Setup:
+
+S = statements of the program
+Q = precondition
+R = postcondition
+
+What we want to prove:
+Q ==> wp(S, R)
+
 b = big
 s = small
 R = b > s
@@ -87,14 +96,23 @@ x > y ==> x > y && (y => x) ==> (y > x)
 A <-- Trivially true
 B is false! A counter example would be if y == x. That does not imply that y > x.
 
+True =/=> True && False
+
 What the program misses is a precondition that x != y.
 
 **************************************************************************************************************************************************************
-			(x != y && x > y ==> wp((b := x; s := y), R))     && (x != y && !(x > y) ==> wp((b := y; s := x), R))
-			(R = b > s)
-			(x != y && x > y ==> wp((b := x; s := y), b > s)) && (x != y && !(x > y) ==> wp((b := y; s := x), b > s))
 
 2b.
+
+Setup:
+
+S = statements of the program
+Q = precondition
+R = postcondition
+
+What we want to prove:
+Q ==> wp(S, R)
+
 b = big
 s = small
 Q = x != y
