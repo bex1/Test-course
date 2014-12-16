@@ -150,6 +150,64 @@ x != y ==> True <-- Always true
 
 3b.
 
+Setup:
+
+S1, S = statements of the program
+Q = precondition
+R = postcondition
+I = invariant
+V = variant (decreases)
+
+S1 = res := 0; IF n0 >= 0 THEN n := n0; m := m0 ELSE n := -n0; m := -m0
+S = res := res + m; n := n - 1
+Q = true
+R = res == n0 * m0
+I = 0 <= n && (n0 >= 0 ==> res == (n0 - n) * m) && (n0 < 0 ==> res == (-n0 - n) * m)
+V = n
+
+
+Let S1 be the statements before the while loop, S the statements inside the while loop.
+
+This is what we want to prove for total correctness:
+1)
+Q ==> wp(S1, I)
+
+To prove this wp(S1, I) must be true to fulfill the implication's truthiness.
+
+Q ==> wp(res := 0; IF n0 >= 0 THEN n := n0; m := m0 ELSE n := -n0; m := -m0, I)
+[Conditional rule]
+Q ==> wp(res := 0; (n0 >= 0 ==> wp(n := n0; m := m0, I)) && (n0 < 0 ==> wp(n := -n0; m := -m0, I)))
+[Sequential rule]
+Q ==> wp(res := 0; (n0 >= 0 ==> wp(n := n0 wp(m := m0, I))) && (n0 < 0 ==> wp(n := -n0 wp(m := -m0, I))))
+[Assign I its value]
+Q ==> wp(res := 0; (n0 >= 0 ==> wp(n := n0 wp(m := m0, (0 <= n && (n0 >= 0 ==> res == (n0 - n) * m) && (n0 < 0 ==> res == (-n0 - n) * m))))) && (n0 < 0 ==> wp(n := -n0 wp(m := -m0, (0 <= n && (n0 >= 0 ==> res == (n0 - n) * m) && (n0 < 0 ==> res == (-n0 - n) * m))))))
+[Assignment rule]
+Q ==> wp(res := 0; (n0 >= 0 ==> wp(n := n0, (0 <= n && (n0 >= 0 ==> res == (n0 - n) * m0) && (n0 < 0 ==> res == (-n0 - n) * m0)))) && (n0 < 0 ==> wp(n := -n0, (0 <= n && (n0 >= 0 ==> res == (n0 - n) * -m0) && (n0 < 0 ==> res == (-n0 - n) * -m0)))))
+[Assignment rule]
+Q ==> wp(res := 0; (n0 >= 0 ==> (0 <= n0 && (n0 >= 0 ==> res == (n0 - n0) * m0) && (n0 < 0 ==> res == (-n0 - n0) * m0))) && (n0 < 0 ==> (0 <= -n0 && (n0 >= 0 ==> res == (n0 + n0) * -m0) && (n0 < 0 ==> res == (-n0 + n0) * -m0))))
+[Assignment rule]
+Q ==> (n0 >= 0 ==> (0 <= n0 && (n0 >= 0 ==> 0 == (n0 - n0) * m0) && (n0 < 0 ==> 0 == (-n0 - n0) * m0))) && (n0 < 0 ==> (0 <= -n0 && (n0 >= 0 ==> 0 == (n0 + n0) * -m0) && (n0 < 0 ==> 0 == (-n0 + n0) * -m0)))
+[Simplify]
+Q ==> (n0 >= 0 ==> (0 <= n0 && (n0 >= 0 ==> 0 == 0) && (n0 < 0 ==> 0 == -2 * n0 * m0))) && (n0 < 0 ==> (0 <= -n0 && (n0 >= 0 ==> 0 == 2 * n0 * -m0) && (n0 < 0 ==> 0 == 0)))
+      |_______________________________________________________________________________|    |_______________________________________________________________________________|
+	                                        |                                               	                                   |
+										   true                                         &&                                        true
+Q ==> true && true
+[Simplify]
+Q ==> true <-- Since Q = true this is trivially true
+
+2)
+I && B ==> wp(S, I)
+
+3)
+I && !B ==> R
+
+4)
+I && B ==> V > 0
+
+5)
+I && B ==> wp(V1 := V; S, V < V1)
+
 
 **************************************************************************************************************************************************************
 
