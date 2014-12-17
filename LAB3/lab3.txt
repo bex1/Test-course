@@ -169,8 +169,8 @@ B = loop condition
 
 Let S1 be the statements before the while loop, S the statements inside the while loop.
 
-S1 = res := 0, if n0 >= 0 then n := n0, m := m0 else n := -n0, m := -m0
-S = res := res + m, n := n - 1
+S1 = res := 0; if n0 >= 0 then n := n0; m := m0 else n := -n0; m := -m0
+S = res := res + m; n := n - 1
 Q = true
 R = res == n0 * m0
 I = 0 <= n && (n0 >= 0 ==> res == (n0 - n) * m) && (n0 < 0 ==> res == (-n0 - n) * m)
@@ -186,7 +186,7 @@ Q ==> wp(S1, I)
 
 To prove this wp(S1, I) must be true to fulfill the implication's truthiness.
 
-wp(res := 0, IF n0 >= 0 THEN n := n0; m := m0 ELSE n := -n0; m := -m0, I)
+wp(res := 0, if n0 >= 0 then n := n0; m := m0 else n := -n0; m := -m0, I)
 
 [Conditional rule]
 	wp(res := 0; (n0 >= 0 ==> wp(n := n0, m := m0, I)) && 
@@ -313,7 +313,7 @@ I && B ==> wp(V1 := V; S, V < V1)
 
 wp(V1 := V; S, V < V1)
 
-wp(V1 := n; res := res + m, n := n - 1, n < V1)
+wp(V1 := n; res := res + m; n := n - 1, n < V1)
 
 [Sequential rule]
 	wp(V1 := n; res := res + m, wp(n := n - 1, n < V1))
@@ -322,10 +322,10 @@ wp(V1 := n; res := res + m, n := n - 1, n < V1)
 	wp(V1 := n; res := res + m, n - 1 < V1)
 
 [Sequential rule]
-	wp(V1 := n; wp(res := res + m, n - 1 < V1))
+	wp(V1 := n, wp(res := res + m, n - 1 < V1))
 
 [Assignment rule]
-	wp(V1 := n; n - 1 < V1)
+	wp(V1 := n, n - 1 < V1)
 
 [Assignment rule]
 	n - 1 < n  <------- trivially true independent of I && B
