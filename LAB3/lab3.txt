@@ -216,11 +216,11 @@ wp(res := 0, IF n0 >= 0 THEN n := n0; m := m0 ELSE n := -n0; m := -m0, I)
     (n0 >= 0 ==> 
       			  (0 <= n0 &&                          	<-------- trivially true
       			  (n0 >= 0 ==> 0 == 0) && 				<-------- trivially true
-      			  (n0 < 0 ==> 0 == -2 * n0 * m0))) 		<-------- true since n0 >= 0 ensures that n0 < 0 is false
+      			  (n0 < 0 ==> 0 == -2 * n0 * m0))) 		<-------- true since 0 <= n0 ensures that n0 < 0 is false
     && 
     (n0 < 0 ==> 
     			  (0 <= -n0 && 							<-------- trivially true
-    			  (n0 >= 0 ==> 0 == 2 * n0 * -m0) &&    <-------- true since n0 < 0 ensures that n0 >= 0 is false
+    			  (n0 >= 0 ==> 0 == 2 * n0 * -m0) &&    <-------- true since 0 <= -n0 ensures that n0 >= 0 is false
     			  (n0 < 0 ==> 0 == 0)))					<-------- trivially true
 
 Q ==> true && true
