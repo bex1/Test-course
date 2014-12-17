@@ -5,7 +5,7 @@ ensures res == fact(n);
 	res := 1;
 	var i := 2;
 	while (i <= n)
-	invariant (i <= n + 1) && res == fact(i-1);
+	invariant (i <= n + 1) && res == fact(i - 1);
 	decreases (n - i);
 	{
 		res := res * i;
