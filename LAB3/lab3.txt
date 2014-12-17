@@ -269,6 +269,7 @@ I && B ==> wp(S, I) is true since we proved that I && B <==> wp(S, I)
 
 3) (Postcondition holds after loop)
 
+Need to prove:
 I && !B ==> R
 
 I && !B <==> 0 <= n && (n0 >= 0 ==> res == (n0 - n) * m) && (n0 < 0 ==> res == (-n0 - n) * m) && 0 >= n
@@ -297,15 +298,40 @@ Since one of n0 >= 0 and n0 < 0 must be true we can therefore conclude that I &&
 
 4)  (Variant is bounded until loop termination)
 
+Need to prove:
 I && B ==> V > 0
 
 I && B ==> n > 0
 
 which is trivially true from loop guard B since 0 < n <==> n > 0 
 
-5)
+5) Variant decreases each iteration:
+
+Need to prove:
 I && B ==> wp(V1 := V; S, V < V1)
 
+
+wp(V1 := V; S, V < V1)
+
+wp(V1 := n; res := res + m, n := n - 1, n < V1)
+
+[Sequential rule]
+	wp(V1 := n; res := res + m, wp(n := n - 1, n < V1))
+
+[Assignment rule]
+	wp(V1 := n; res := res + m, n - 1 < V1)
+
+[Sequential rule]
+	wp(V1 := n; wp(res := res + m, n - 1 < V1))
+
+[Assignment rule]
+	wp(V1 := n; n - 1 < V1)
+
+[Assignment rule]
+	n - 1 < n  <------- trivially true independent of I && B
+
+Hence 
+I && B ==> wp(V1 := V; S, V < V1) is always true and is therefore proved.
 
 **************************************************************************************************************************************************************
 
