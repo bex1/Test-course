@@ -292,7 +292,7 @@ so we can conclude that n0 >= 0 ==> res == n0 * m0
 Z with the use of S1 above tells us that when n0 < 0 then it must be the case that m == -m0 since they are both unchanged after this
 so we can conclude that n0 < 0 ==> res == n0 * m0
 
-Since one of n0 >= 0 and n0 < 0 we can therefore conclude that I && !B ==> R.
+Since one of n0 >= 0 and n0 < 0 must be true we can therefore conclude that I && !B ==> R.
 
 
 4)  (Variant is bounded until loop termination)
