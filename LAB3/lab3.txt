@@ -282,21 +282,26 @@ Now we can show that I && !B ==> R
 
 (0 == n && (n0 >= 0 ==> res == n0 * m) && (n0 < 0 ==> res == -n0 * m)) ==> res == n0 * m0
 |______|   |_________________________|    |__________________________|
-   A                  B                                C
+   X                  Y                                Z
 
-A tells us nothing relevant.
+X tells us nothing relevant.
 
-B with the use of S1 above tells us that when n0 >= 0 then it must be the case that m == m0 since they are both unchanged after this  
+Y with the use of S1 above tells us that when n0 >= 0 then it must be the case that m == m0 since they are both unchanged after this  
 so we can conclude that n0 >= 0 ==> res == n0 * m0
 
-C with the use of S1 above tells us that when n0 < 0 then it must be the case that m == -m0 since they are both unchanged after this
+Z with the use of S1 above tells us that when n0 < 0 then it must be the case that m == -m0 since they are both unchanged after this
 so we can conclude that n0 < 0 ==> res == n0 * m0
 
 Since one of n0 >= 0 and n0 < 0 we can therefore conclude that I && !B ==> R.
 
 
 4)  (Variant is bounded until loop termination)
+
 I && B ==> V > 0
+
+I && B ==> n > 0
+
+which is trivially true from loop guard B since 0 < n <==> n > 0 
 
 5)
 I && B ==> wp(V1 := V; S, V < V1)
