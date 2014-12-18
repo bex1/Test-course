@@ -414,6 +414,26 @@ I && B ==> ((i <= n) && res * i == fact(i))
 I && !B ==> R
 
 
+(i <= n + 1) && res == fact(i - 1) && !(i <= n) ==> res == fact(n)
+
+[Simplify]
+(i - 1 <= n) && res == fact(i - 1) && (n < i) ==> res == fact(n)
+
+[Simplify]
+(i - 1 <= n < i) && res == fact(i - 1) ==> res == fact(n)
+|______________|
+        |
+[This means that i must be n + 1]
+(i == n + 1) && res == fact(i - 1) ==> res == fact(n)
+
+[Simplify]
+res == fact(n + 1 - 1) ==> res == fact(n)
+
+[Simplify]
+res == fact(n) ==> res == fact(n)
+
+This is trivially true. I && !B ==> R is therefore true.
+
 4)
 I && B ==> V > 0
 
