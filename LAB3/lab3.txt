@@ -342,7 +342,7 @@ S = res := res * i; i := i + 1
 Q = n > 0
 R = res == fact(n)
 I = (i <= n + 1) && res == fact(i - 1)
-V = (n - i)
+V = (n - i + 1)
 B = (i <= n)
 
 *****************************************
@@ -456,6 +456,32 @@ Since the equivalence is true the implication I && B ==> V > 0 is also true.
 I && B ==> wp(V1 := V; S, V < V1)
 
 
+(i <= n + 1) && res == fact(i - 1) && (i <= n) ==> wp(V1 := (n - i + 1); res := res * i; i := (i + 1), ((n - i + 1)) < V1)
 
+[Sequential rule]
+(i <= n + 1) && res == fact(i - 1) && (i <= n) ==> wp(V1 := (n - i + 1); res := res * i, wp(i := (i + 1), ((n - (i + 1) + 1)) < V1))
+
+[Assignment rule]
+(i <= n + 1) && res == fact(i - 1) && (i <= n) ==> wp(V1 := (n - i + 1); res := res * i, ((n - (i + 1) + 1)) < V1)
+
+[Sequential rule]
+(i <= n + 1) && res == fact(i - 1) && (i <= n) ==> wp(V1 := (n - i + 1), wp(res := res * i, ((n - (i + 1) + 1)) < V1))
+
+[Assignment rule]
+(i <= n + 1) && res == fact(i - 1) && (i <= n) ==> wp(V1 := (n - i + 1), ((n - (i + 1) + 1)) < V1)
+
+[Assignment rule]
+(i <= n + 1) && res == fact(i - 1) && (i <= n) ==> ((n - (i + 1) + 1)) < (n - i + 1)
+
+[Simplify]
+(i <= n + 1) && res == fact(i - 1) && (i <= n) ==> ((n - i)) < (n - i + 1)
+                                                   |_____________________|
+												              |
+												   This will always be true
+
+Since the right hand side is true the implication I && B ==> wp(V1 := V; S, V < V1) will always be true.
+
+
+Since all of the proofs above holds the program is considered to be verified to hold according to the specification.
 
 **************************************************************************************************************************************************************
