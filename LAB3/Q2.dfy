@@ -1,3 +1,8 @@
+/*
+ * Daniel Bäckström and Martin Hermansson
+ * Group 4
+ */
+ 
 method Q2(x : int, y : int) returns (big : int, small : int) 
 requires x != y;
 ensures big > small;

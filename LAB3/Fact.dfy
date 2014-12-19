@@ -1,3 +1,8 @@
+/*
+ * Daniel Bäckström and Martin Hermansson
+ * Group 4
+ */
+
 method ComputeFact(n : nat) returns (res : nat)
 requires n > 0;
 ensures res == fact(n);
